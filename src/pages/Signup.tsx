@@ -93,19 +93,23 @@ const RoleTab = ({
   <button
     type="button"
     onClick={onClick}
-    className={`relative flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-colors ${
-      active ? "text-primary-foreground" : "text-foreground hover:text-primary"
+    className={`relative flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 z-10 ${
+      active
+        ? "text-primary-foreground shadow-sm"
+        : "text-muted-foreground hover:text-foreground"
     }`}
   >
     {active && (
       <motion.span
         layoutId="role-tab-active"
-        className="absolute inset-0 rounded-xl bg-primary -z-10"
+        className="absolute inset-0 rounded-xl bg-primary z-0 shadow-sm"
         transition={{ type: "spring", stiffness: 380, damping: 30 }}
       />
     )}
-    {icon}
-    {label}
+    <span className="relative z-10 flex items-center gap-2">
+      {icon}
+      {label}
+    </span>
   </button>
 );
 
