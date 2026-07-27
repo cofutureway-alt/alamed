@@ -142,11 +142,12 @@ export default function DynamicRegistrationField({
           value={value ?? ""}
           onValueChange={onChange}
           disabled={disabled || readOnly}
+          dir="rtl"
         >
-          <SelectTrigger id={field.field_key}>
+          <SelectTrigger id={field.field_key} dir="rtl">
             <SelectValue placeholder="— اختر —" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent dir="rtl">
             {options.map((o) => (
               <SelectItem key={o.value} value={o.value}>
                 {o.label}
@@ -161,19 +162,20 @@ export default function DynamicRegistrationField({
           value={value ?? ""}
           onValueChange={onChange}
           disabled={disabled || readOnly}
+          dir="rtl"
           className="flex flex-wrap gap-3"
         >
           {options.map((o) => (
             <label
               key={o.value}
               htmlFor={`${field.field_key}_${o.value}`}
-              className="flex items-center gap-2 rounded-xl border border-border/60 px-3 py-2 cursor-pointer hover:border-primary/60 transition-colors data-[state=checked]:border-primary"
+              className="flex items-center gap-2 rounded-xl border border-border/60 px-3.5 py-2 cursor-pointer hover:border-primary/60 transition-colors data-[state=checked]:border-primary"
             >
               <RadioGroupItem
                 id={`${field.field_key}_${o.value}`}
                 value={o.value}
               />
-              <span className="text-sm">{o.label}</span>
+              <span className="text-sm font-medium">{o.label}</span>
             </label>
           ))}
         </RadioGroup>,
