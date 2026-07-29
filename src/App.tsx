@@ -96,6 +96,9 @@ import AdminShippingZones from "./pages/admin/AdminShippingZones";
 import AdminBookOrders from "./pages/admin/AdminBookOrders";
 import AdminBookOrderDetail from "./pages/admin/AdminBookOrderDetail";
 import MyBookOrders from "./pages/student/MyBookOrders";
+import Branches from "./pages/Branches";
+import AdminBranches from "./pages/admin/AdminBranches";
+import AdminTestimonials from "./pages/admin/AdminTestimonials";
 
 
 const queryClient = new QueryClient();
@@ -117,6 +120,7 @@ const App = () => (
             <Route path="/parent-signup" element={<RequireGuest><Signup /></RequireGuest>} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/bundles" element={<Bundles />} />
+            <Route path="/branches" element={<Branches />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/courses/:id" element={<CourseDetails />} />
             <Route path="/books" element={<Books />} />
@@ -218,6 +222,8 @@ const App = () => (
               <Route path="books/new" element={<AdminBookEditor />} />
               <Route path="books/:id" element={<AdminBookEditor />} />
               <Route path="shipping-zones" element={<AdminShippingZones />} />
+              <Route path="branches" element={<AdminBranches />} />
+              <Route path="testimonials" element={<AdminTestimonials />} />
               <Route path="book-orders" element={<AdminBookOrders />} />
               <Route path="book-orders/:id" element={<AdminBookOrderDetail />} />
               <Route path="settings" element={<AdminSettings />} />

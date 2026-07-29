@@ -68,6 +68,7 @@ const nav: NavEntry[] = [
       { to: "/admin/bundles", label: "الباقات", icon: Package },
       { to: "/admin/books", label: "إدارة الكتب", icon: BookMarked },
       { to: "/admin/shipping-zones", label: "مناطق الشحن", icon: Truck },
+      { to: "/admin/branches", label: "إدارة الفروع", icon: Landmark },
       { to: "/admin/stages", label: "المراحل", icon: Layers },
       { to: "/admin/subjects", label: "المواد الدراسية", icon: BookMarked },
     ],
@@ -79,6 +80,7 @@ const nav: NavEntry[] = [
     children: [
       { to: "/admin/users",               label: "جميع المستخدمين",    icon: UserCog },
       { to: "/admin/students",            label: "إدارة الطلاب",        icon: Users },
+      { to: "/admin/testimonials",        label: "آراء الطلاب",         icon: MessageSquare },
       { to: "/admin/parents",             label: "أولياء الأمور",       icon: Users },
       { to: "/admin/parent-link-requests",label: "طلبات أولياء الأمور", icon: Users },
       { to: "/admin/quiz-attempts",       label: "محاولات الاختبارات",  icon: ClipboardCheck },

@@ -107,6 +107,7 @@ const Footer = () => {
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">الرئيسية</Link>
               <Link to="/courses" className="text-sm text-muted-foreground hover:text-foreground transition-colors">الدورات التعليمية</Link>
               <Link to="/books" className="text-sm text-muted-foreground hover:text-foreground transition-colors">الكتب والمراجع</Link>
+              <Link to="/branches" className="text-sm text-muted-foreground hover:text-foreground transition-colors">فروعنا وأماكننا</Link>
               <Link to="/leaderboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">لوحة المتصدرين</Link>
               <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">لوحة الطالب</Link>
             </div>
