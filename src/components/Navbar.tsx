@@ -158,6 +158,13 @@ const Navbar = () => {
     );
   };
 
+  const dashboardPath =
+    profile?.role === "admin"
+      ? "/admin"
+      : profile?.role === "parent"
+        ? "/parent"
+        : "/dashboard";
+
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
@@ -187,15 +194,25 @@ const Navbar = () => {
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggle />
           {user && <WalletWidget to={profile?.role === "admin" ? "/admin/wallets" : "/dashboard/wallet"} />}
-          <CartWidget />
+          {user && <CartWidget />}
+          {user && <NotificationBell />}
 
           {user && (
-            <Avatar className="w-8 h-8 border border-border">
-              {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}
-              <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+            <Link
+              to={dashboardPath}
+              title={profile?.role === "admin" ? "لوحة الإدارة" : "لوحة التحكم"}
+              className="relative group focus:outline-none"
+            >
+              <Avatar className="w-9 h-9 border-2 border-primary/40 group-hover:border-primary group-active:scale-95 transition-all shadow-sm">
+                {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-primary text-primary-foreground rounded-full border border-background flex items-center justify-center text-[8px] font-bold shadow-sm">
+                <LayoutDashboard size={8} />
+              </span>
+            </Link>
           )}
           <Button variant="ghost" size="icon" onClick={() => setOpen(!open)}>
             {open ? <X size={20} /> : <Menu size={20} />}
@@ -226,22 +243,33 @@ const Navbar = () => {
               <div className="pt-3 mt-3 border-t border-border">
                 {user ? (
                   <div className="space-y-2">
-                    <div className="flex items-center gap-3 py-2">
-                      <Avatar className="w-10 h-10 border border-border">
+                    <Link
+                      to={dashboardPath}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 p-2 rounded-xl hover:bg-accent/60 transition-colors"
+                    >
+                      <Avatar className="w-10 h-10 border-2 border-primary/30">
                         {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
                           {initials}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-bold truncate">{profile?.full_name || "مستخدم"}</div>
-                        <div className="text-xs text-muted-foreground truncate" dir="ltr">{profile?.phone_number || profile?.email || (user.email && !user.email.endsWith("@phone.noemail.invalid") ? user.email : "")}</div>
+                        <div className="text-sm font-bold truncate flex items-center gap-1.5">
+                          <span>{profile?.full_name || "مستخدم"}</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">
+                            {profile?.role === "admin" ? "مدير" : profile?.role === "parent" ? "ولي أمر" : "طالب"}
+                          </span>
+                        </div>
+                        <div className="text-xs text-muted-foreground truncate" dir="ltr">
+                          {profile?.phone_number || profile?.email || (user.email && !user.email.endsWith("@phone.noemail.invalid") ? user.email : "")}
+                        </div>
                       </div>
-                    </div>
-                    <Link to={profile?.role === "admin" ? "/admin" : "/dashboard"} onClick={() => setOpen(false)}>
+                    </Link>
+                    <Link to={dashboardPath} onClick={() => setOpen(false)}>
                       <Button variant="secondary" size="sm" className="w-full gap-2 font-bold">
                         <LayoutDashboard className="w-4 h-4" />
-                        {profile?.role === "admin" ? "لوحة الإدارة" : "لوحتي"}
+                        {profile?.role === "admin" ? "لوحة الإدارة" : "لوحة التحكم"}
                       </Button>
                     </Link>
                     <Button variant="outline" size="sm" onClick={handleSignOut} className="w-full gap-2">
