@@ -33,6 +33,7 @@ import {
   BadgeDollarSign,
   Package,
   Trophy,
+  Coins,
   Truck,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -100,6 +101,7 @@ const nav: NavEntry[] = [
       { to: "/admin/book-orders", label: "طلبات الكتب", icon: Package },
       { to: "/admin/refund-requests", label: "طلبات الاسترجاع", icon: Inbox },
       { to: "/admin/billing", label: "الفوترة والمدفوعات", icon: Receipt },
+      { to: "/admin/renewal-payments", label: "سجل سداد التجديد", icon: Coins },
     ],
   },
   {
