@@ -15,7 +15,7 @@ export default function Branches() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "فروعنا ومراكزنا — الساعي";
+    document.title = "أماكن التواجد (الأماكن التي يشرح بها المعلم) — الساعي";
     let isMounted = true;
     (async () => {
       try {
@@ -23,7 +23,7 @@ export default function Branches() {
         if (isMounted) setBranches(data);
       } catch (e: any) {
         if (isMounted) {
-          toast.error("تعذّر تحميل بيانات الفروع");
+          toast.error("مش عارفين نحمل الأماكن دلوقتي، حاول تاني كمان شوية");
           setBranches([]);
         }
       } finally {
@@ -73,15 +73,15 @@ export default function Branches() {
 
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary shadow-sm">
               <Landmark size={14} />
-              <span>مراكز الحضور المباشر</span>
+              <span>أماكن الشرح المباشر</span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-extrabold text-foreground tracking-tight">
-              فروعنا وأماكن حضورنا
+              أماكن التواجد
             </h1>
 
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              تعرّف على فروع منصة الساعي ومراكز التعلم المباشر المتاحة في مختلف المحافظات
+              الأماكن والمراكز اللي بيشرح فيها المعلم وتقدر تحضر فيها المحاضرات والدروس مباشر في المحافظات المختلفة
             </p>
           </div>
 
@@ -104,9 +104,9 @@ export default function Branches() {
               <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
                 <Building2 size={32} />
               </div>
-              <h3 className="text-xl font-bold mb-2">لا توجد فروع مضافة حالياً</h3>
+              <h3 className="text-xl font-bold mb-2">مفيش أماكن متضافة دلوقتي</h3>
               <p className="text-sm text-muted-foreground">
-                تابعنا قريباً للاطلاع على الفروع والمراكز الجديدة في محافظتك.
+                تابعنا قريب عشان تعرف الأماكن والمراكز الجديدة في محافظتك أول بأول.
               </p>
             </div>
           ) : (
@@ -125,7 +125,7 @@ export default function Branches() {
                     <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
                       <span>محافظة {group.governorate}</span>
                       <Badge variant="secondary" className="text-xs font-semibold">
-                        {group.items.length} {group.items.length === 1 ? "فرع" : "فروع"}
+                        {group.items.length} {group.items.length === 1 ? "مكان" : "أماكن"}
                       </Badge>
                     </h2>
                   </div>

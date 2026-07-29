@@ -104,9 +104,9 @@ export default function AdminBranches() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!governorate.trim()) return toast.error("أدخل اسم المحافظة");
-    if (!branchName.trim()) return toast.error("أدخل اسم الفرع / السنتر");
-    if (!addressDetails.trim()) return toast.error("أدخل تفاصيل العنوان");
+    if (!governorate.trim()) return toast.error("اكتب اسم المحافظة الأول");
+    if (!branchName.trim()) return toast.error("اكتب اسم المكان أو السنتر");
+    if (!addressDetails.trim()) return toast.error("اكتب العنوان بالتفصيل");
 
     setSaving(true);
     try {
@@ -117,7 +117,7 @@ export default function AdminBranches() {
           address_details: addressDetails.trim(),
           is_active: isActive,
         });
-        toast.success("تم تحديث بيانات الفرع");
+        toast.success("تم تعديل بيانات المكان بنجاح");
       } else {
         const nextOrder = (branches?.length ?? 0) + 1;
         await adminCreateBranch({
@@ -127,12 +127,12 @@ export default function AdminBranches() {
           is_active: isActive,
           order_index: nextOrder,
         });
-        toast.success("تم إضافة الفرع بنجاح");
+        toast.success("تم إضافة المكان بنجاح");
       }
       setModalOpen(false);
       load();
     } catch (err: any) {
-      toast.error(err?.message || "تعذّر حفظ التغييرات");
+      toast.error(err?.message || "مش عارفين نحفظ التغييرات دلوقتي، حاول تاني");
     } finally {
       setSaving(false);
     }
@@ -145,9 +145,9 @@ export default function AdminBranches() {
         prev ? prev.map((x) => (x.id === b.id ? { ...x, is_active: updated } : x)) : null
       );
       await adminUpdateBranch(b.id, { is_active: updated });
-      toast.success(updated ? "تم تفعيل الفرع" : "تم إلغاء تفعيل الفرع");
+      toast.success(updated ? "تم تفعيل المكان على الموقع" : "تم إخفاء المكان من الموقع");
     } catch (e: any) {
-      toast.error("فشل تغيير الحالة");
+      toast.error("فشل تغيير حالة المكان، حاول تاني");
       load();
     }
   };
@@ -157,11 +157,11 @@ export default function AdminBranches() {
     setDeletePending(true);
     try {
       await adminDeleteBranch(deleting.id);
-      toast.success("تم حذف الفرع");
+      toast.success("تم حذف المكان بنجاح");
       setDeleting(null);
       load();
     } catch (e: any) {
-      toast.error("فشل حذف الفرع");
+      toast.error("مش عارفين نحذف المكان دلوقتي، حاول تاني");
     } finally {
       setDeletePending(false);
     }
@@ -187,9 +187,9 @@ export default function AdminBranches() {
       await adminReorderBranches(
         reordered.map((item) => ({ id: item.id, order_index: item.order_index }))
       );
-      toast.success("تم تحديث ترتيب الفروع");
+      toast.success("تم تحديث ترتيب الأماكن");
     } catch (e) {
-      toast.error("فشل حفظ الترتيب");
+      toast.error("فشل حفظ الترتيب، حاول تاني");
       load();
     }
   };
@@ -212,15 +212,15 @@ export default function AdminBranches() {
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
             <Landmark className="w-8 h-8 text-primary" />
-            <span>إدارة الفروع والمراكز</span>
+            <span>أماكن التواجد (أماكن الشرح)</span>
           </h1>
           <p className="text-muted-foreground mt-1">
-            أضف ونظّم المراكز والفروع المتاحة لحضور الطلاب واعرض تفاصيل العناوين.
+            ضيف ونظّم الأماكن والمراكز اللي بيشرح فيها المعلم وعنون كل مكان بالتفصيل.
           </p>
         </div>
         <Button onClick={openAdd} size="lg" className="shadow-md">
           <Plus className="w-4 h-4 ml-2" />
-          إضافة فرع جديد
+          إضافة مكان جديد
         </Button>
       </motion.div>
 
@@ -228,7 +228,7 @@ export default function AdminBranches() {
       <div className="relative max-w-md">
         <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
-          placeholder="ابحث باسم الفرع، المحافظة، أو العنوان..."
+          placeholder="ادور باسم المكان، المحافظة، أو العنوان..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="pr-10"
@@ -264,7 +264,7 @@ export default function AdminBranches() {
                         <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
                           <span>{b.branch_name}</span>
                           <Badge variant={b.is_active ? "default" : "secondary"}>
-                            {b.is_active ? "مفضّل" : "مغلق"}
+                            {b.is_active ? "متاح للشرح" : "مغلق"}
                           </Badge>
                         </h3>
                         <span className="text-xs text-muted-foreground font-semibold">
@@ -304,7 +304,7 @@ export default function AdminBranches() {
 
                   <div className="pt-2 border-t border-border/50 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground font-medium">العرض بالموقع:</span>
+                      <span className="text-xs text-muted-foreground font-medium">عرض المكان بالموقع:</span>
                       <Switch
                         checked={b.is_active}
                         onCheckedChange={() => handleToggleActive(b)}
@@ -340,11 +340,11 @@ export default function AdminBranches() {
       ) : (
         <div className="text-center py-16 rounded-3xl border border-dashed border-border bg-card/40">
           <Building2 className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-          <h3 className="text-lg font-bold">لا توجد فروع مضافة</h3>
-          <p className="text-sm text-muted-foreground mb-4">انقر فوق إضافة فرع جديد لبدء التوزيع.</p>
+          <h3 className="text-lg font-bold">مفيش أماكن متضافة لسة</h3>
+          <p className="text-sm text-muted-foreground mb-4">دوس على إضافة مكان جديد عشان تبدأ تضيف أماكن الشرح.</p>
           <Button onClick={openAdd}>
             <Plus className="w-4 h-4 ml-2" />
-            إضافة فرع جديد
+            إضافة مكان جديد
           </Button>
         </div>
       )}
@@ -355,7 +355,7 @@ export default function AdminBranches() {
           <form onSubmit={handleSave} className="space-y-4">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold">
-                {editing ? "تعديل بيانات الفرع" : "إضافة فرع جديد"}
+                {editing ? "تعديل بيانات المكان" : "إضافة مكان جديد"}
               </DialogTitle>
             </DialogHeader>
 
@@ -365,17 +365,17 @@ export default function AdminBranches() {
                 <Input
                   value={governorate}
                   onChange={(e) => setGovernorate(e.target.value)}
-                  placeholder="مثال: الجيزة، أسيوط، سوهاج…"
+                  placeholder="زي: الجيزة، أسيوط، سوهاج…"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold">اسم الفرع / السنتر</label>
+                <label className="text-sm font-bold">اسم المكان / السنتر</label>
                 <Input
                   value={branchName}
                   onChange={(e) => setBranchName(e.target.value)}
-                  placeholder="مثال: سنتر IMA"
+                  placeholder="زي: سنتر IMA"
                   required
                 />
               </div>
@@ -386,15 +386,15 @@ export default function AdminBranches() {
                   value={addressDetails}
                   onChange={(e) => setAddressDetails(e.target.value)}
                   rows={3}
-                  placeholder="مثال: الهرم، سهل حمزة، أعلى محلات اكتيف، داخل چوميرال مول"
+                  placeholder="زي: الهرم، سهل حمزة، أعلى محلات اكتيف، داخل چوميرال مول"
                   required
                 />
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl border border-border bg-accent/20">
                 <div>
-                  <div className="text-sm font-bold">تفعيل الفرع للموقع العام</div>
-                  <div className="text-xs text-muted-foreground">سيظهر في صفحة "فروعنا" عندما يكون مفعلاً</div>
+                  <div className="text-sm font-bold">تفعيل المكان على الموقع</div>
+                  <div className="text-xs text-muted-foreground">هيطهر في صفحة "أماكن التواجد" لما يكون متفعل</div>
                 </div>
                 <Switch checked={isActive} onCheckedChange={setIsActive} />
               </div>
@@ -406,7 +406,7 @@ export default function AdminBranches() {
               </Button>
               <Button type="submit" disabled={saving}>
                 {saving && <Loader2 className="w-4 h-4 animate-spin ml-2" />}
-                {editing ? "حفظ التغييرات" : "إضافة الفرع"}
+                {editing ? "حفظ التغييرات" : "إضافة المكان"}
               </Button>
             </DialogFooter>
           </form>
@@ -419,10 +419,10 @@ export default function AdminBranches() {
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="w-5 h-5" />
-              حذف الفرع
+              حذف المكان
             </AlertDialogTitle>
             <AlertDialogDescription>
-              هل أنت متأكد من حذف فرع "{deleting?.branch_name}" بمحافظة {deleting?.governorate}؟ لا يمكن التراجع عن هذا الإجراء.
+              متأكد إنك عاوز تحذف مكان "{deleting?.branch_name}" بمحافظة {deleting?.governorate}؟ مش هتعرف ترجع في الخطوة دي تاني.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -68,7 +68,7 @@ const nav: NavEntry[] = [
       { to: "/admin/bundles", label: "الباقات", icon: Package },
       { to: "/admin/books", label: "إدارة الكتب", icon: BookMarked },
       { to: "/admin/shipping-zones", label: "مناطق الشحن", icon: Truck },
-      { to: "/admin/branches", label: "إدارة الفروع", icon: Landmark },
+      { to: "/admin/branches", label: "أماكن التواجد (أماكن الشرح)", icon: Landmark },
       { to: "/admin/stages", label: "المراحل", icon: Layers },
       { to: "/admin/subjects", label: "المواد الدراسية", icon: BookMarked },
     ],

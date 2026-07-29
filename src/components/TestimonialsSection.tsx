@@ -62,7 +62,7 @@ export default function TestimonialsSection() {
 
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary shadow-sm">
             <MessageSquareQuote size={14} />
-            <span>قصص نجاح وتجارب إيجابية</span>
+            <span>آراء وتجارب الطلاب</span>
           </div>
 
           <h2 className="text-3xl md:text-5xl font-extrabold text-foreground tracking-tight">
@@ -70,7 +70,7 @@ export default function TestimonialsSection() {
           </h2>
 
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-            اقرأ بعضاً من تجارب وانطباعات الطلاب والطالبات معنا في رحلتهم لتعلّم العلوم الشرعية
+            اقرأ بعض من تجارب وانطباعات الطلاب والطالبات اللي بيتعلموا مع المعلم في المنصة
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default function TestimonialsSection() {
                     />
                     <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full flex items-center gap-1.5">
                       <Eye size={12} />
-                      <span>انقر للتكبير</span>
+                      <span>دوس عشان تكبر الصورة</span>
                     </div>
                   </div>
                   {testimonials[activeIndex].student_name && (

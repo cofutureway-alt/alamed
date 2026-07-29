@@ -100,11 +100,11 @@ export default function AdminTestimonials() {
           });
           successCount++;
         } catch (err: any) {
-          toast.error(`فشل رفع صورة: ${file.name}`);
+          toast.error(`مش عارفين نرفع صورة: ${file.name}`);
         }
       }
       if (successCount > 0) {
-        toast.success(`تم رفع ${successCount} رأي/صورة بنجاح`);
+        toast.success(`تم رفع ${successCount} صورة رأي بنجاح`);
         load();
       }
     } finally {
@@ -120,9 +120,9 @@ export default function AdminTestimonials() {
         prev ? prev.map((x) => (x.id === item.id ? { ...x, is_visible: updated } : x)) : null
       );
       await adminUpdateTestimonial(item.id, { is_visible: updated });
-      toast.success(updated ? "تم إظهار الرأي بالموقع" : "تم إخفاء الرأي");
+      toast.success(updated ? "تم إظهار الرأي على الموقع" : "تم إخفاء الرأي من الموقع");
     } catch (e) {
-      toast.error("فشل تغيير الحالة");
+      toast.error("فشل تغيير حالة الرأي، حاول تاني");
       load();
     }
   };
@@ -132,10 +132,10 @@ export default function AdminTestimonials() {
     setSavingId(item.id);
     try {
       await adminUpdateTestimonial(item.id, { student_name: nameVal || null });
-      toast.success("تم حفظ اسم صاحب الرأي");
+      toast.success("تم حفظ اسم الطالب بنجاح");
       load();
     } catch (e) {
-      toast.error("فشل حفظ الاسم");
+      toast.error("مش عارفين نحفظ الاسم دلوقتي، حاول تاني");
     } finally {
       setSavingId(null);
     }
@@ -150,7 +150,7 @@ export default function AdminTestimonials() {
       setDeleting(null);
       load();
     } catch (e) {
-      toast.error("فشل حذف الرأي");
+      toast.error("مش عارفين نحذف الرأي دلوقتي، حاول تاني");
     } finally {
       setDeletePending(false);
     }
@@ -178,7 +178,7 @@ export default function AdminTestimonials() {
       );
       toast.success("تم تحديث ترتيب الآراء");
     } catch (e) {
-      toast.error("فشل حفظ الترتيب");
+      toast.error("فشل حفظ الترتيب، حاول تاني");
       load();
     }
   };
@@ -194,10 +194,10 @@ export default function AdminTestimonials() {
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
             <MessageSquare className="w-8 h-8 text-primary" />
-            <span>آراء وتقييمات الطلاب</span>
+            <span>آراء وانطباعات الطلاب</span>
           </h1>
           <p className="text-muted-foreground mt-1">
-            ارفع صور وتقييمات الطلاب لتظهر في الواجهة الرئيسية للموقع.
+            ارفع صور وتقييمات الطلاب عشان تظهر في الصفحة الرئيسية للموقع.
           </p>
         </div>
 
