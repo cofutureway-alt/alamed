@@ -54,7 +54,7 @@ DROP TRIGGER IF EXISTS parent_links_touch ON public.parent_student_links;
 CREATE TRIGGER parent_links_touch BEFORE UPDATE ON public.parent_student_links
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
--- 2) Extend handle_new_user to allow self-selected 'parent' role at signup
+-- 2) Extend handle_new_user to allow self-selected 'parent' role at signup and 'admin' role at admin creation
 CREATE OR REPLACE FUNCTION public.handle_new_user()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -65,8 +65,10 @@ DECLARE
   m jsonb := COALESCE(NEW.raw_user_meta_data, '{}'::jsonb);
   v_role public.app_role := 'student'::public.app_role;
 BEGIN
-  IF NULLIF(m->>'intended_role','') = 'parent' THEN
+  IF NULLIF(m->>'intended_role','') = 'parent' OR NULLIF(m->>'role','') = 'parent' THEN
     v_role := 'parent'::public.app_role;
+  ELSIF NULLIF(m->>'intended_role','') = 'admin' OR NULLIF(m->>'role','') = 'admin' THEN
+    v_role := 'admin'::public.app_role;
   END IF;
 
   INSERT INTO public.profiles (
@@ -86,7 +88,9 @@ BEGIN
     CASE WHEN NULLIF(m->>'stage_id','') IS NOT NULL THEN (m->>'stage_id')::uuid ELSE NULL END,
     COALESCE(m->'custom_fields', '{}'::jsonb)
   )
-  ON CONFLICT (id) DO NOTHING;
+  ON CONFLICT (id) DO UPDATE SET
+    role = EXCLUDED.role,
+    full_name = CASE WHEN EXCLUDED.full_name <> '' THEN EXCLUDED.full_name ELSE public.profiles.full_name END;
   RETURN NEW;
 END;
 $function$;

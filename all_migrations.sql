@@ -1,10 +1,3 @@
--- Combined Master Migration File for Supabase Project mgrkbcipkmikggmiyvwm
-
-
--- ==========================================
--- MIGRATION: 20260717084807_c7e0538b-882c-467e-b4ee-c66e74476eb5.sql
--- ==========================================
-
 
 CREATE TYPE public.app_role AS ENUM ('admin', 'student');
 CREATE TYPE public.course_status AS ENUM ('draft', 'published');
@@ -239,12 +232,6 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
-
--- ==========================================
--- MIGRATION: 20260717084830_91cf20bf-12be-4a27-afa0-33a57070313b.sql
--- ==========================================
-
-
 -- Revoke public execution of internal helpers used only by RLS/triggers
 REVOKE EXECUTE ON FUNCTION public.has_role(UUID, public.app_role) FROM anon, authenticated, PUBLIC;
 REVOKE EXECUTE ON FUNCTION public.is_enrolled_in_lesson_course(UUID, UUID) FROM anon, authenticated, PUBLIC;
@@ -255,12 +242,6 @@ REVOKE EXECUTE ON FUNCTION public.handle_new_user() FROM anon, authenticated, PU
 -- SECURITY DEFINER to expose ONLY (id, unit_id, title, position) — no video_url —
 -- for signed-out curriculum previews. This is the intended pattern; the linter
 -- ERROR is expected and reviewed.
-
-
--- ==========================================
--- MIGRATION: 20260717085328_e633f183-52a0-4df0-98a3-069ddf1406e2.sql
--- ==========================================
-
 
 -- Storage policies for the thumbnails bucket
 CREATE POLICY "Authenticated can read thumbnails"
@@ -284,12 +265,6 @@ ON storage.objects FOR DELETE
 TO authenticated
 USING (bucket_id = 'thumbnails' AND public.has_role(auth.uid(), 'admin'));
 
-
--- ==========================================
--- MIGRATION: 20260717085731_425cb427-f052-49be-acb5-8227d03b7b10.sql
--- ==========================================
-
-
 CREATE POLICY "Admins read lesson files"
 ON storage.objects FOR SELECT
 TO authenticated
@@ -310,26 +285,10 @@ CREATE POLICY "Admins delete lesson files"
 ON storage.objects FOR DELETE
 TO authenticated
 USING (bucket_id = 'lesson-files' AND public.has_role(auth.uid(), 'admin'));
-
-
--- ==========================================
--- MIGRATION: 20260717092202_1cdc024d-51f2-401c-92e3-adb3a2cfa622.sql
--- ==========================================
-
 GRANT EXECUTE ON FUNCTION public.has_role(uuid, app_role) TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION public.is_enrolled_in_lesson_course(uuid, uuid) TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION public.get_lessons_public() TO authenticated, anon;
-
--- ==========================================
--- MIGRATION: 20260717092224_c483dd28-afdb-4b17-98d3-5b86690e0fd9.sql
--- ==========================================
-
 UPDATE public.profiles SET role = 'admin' WHERE id = 'e5889949-1dbb-4614-a498-4463da410e56';
-
--- ==========================================
--- MIGRATION: 20260717105401_bd7bbc47-aa46-4e0a-83b9-62c241f92519.sql
--- ==========================================
-
 
 CREATE TABLE public.lesson_watch_progress (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -380,12 +339,6 @@ CREATE TRIGGER update_lwp_updated_at
   BEFORE UPDATE ON public.lesson_watch_progress
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
-
--- ==========================================
--- MIGRATION: 20260717105805_69e0c4a3-d50f-4aa9-b234-e615a60862cc.sql
--- ==========================================
-
-
 CREATE TABLE public.video_player_settings (
   id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
   double_tap_seek_enabled BOOLEAN NOT NULL DEFAULT true,
@@ -424,12 +377,6 @@ CREATE POLICY "Admins update player settings"
 CREATE TRIGGER update_vps_updated_at
   BEFORE UPDATE ON public.video_player_settings
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
-
-
--- ==========================================
--- MIGRATION: 20260717112849_24e8cfac-b028-4267-9293-584b0cd52e8f.sql
--- ==========================================
-
 
 -- ============ SUBJECTS (Phase 9) ============
 CREATE TABLE public.subjects (
@@ -577,12 +524,6 @@ $$;
 
 GRANT EXECUTE ON FUNCTION public.increment_file_download(uuid) TO authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260717112916_e9f28c77-9e02-4815-9ede-7dafc3dfb504.sql
--- ==========================================
-
-
 CREATE POLICY "Enrolled users read lesson files"
 ON storage.objects FOR SELECT TO authenticated
 USING (
@@ -597,12 +538,6 @@ USING (
       AND e.user_id = auth.uid()
   )
 );
-
-
--- ==========================================
--- MIGRATION: 20260718160338_b6c6dd95-8dc9-4f35-a6e4-997cbe5374e9.sql
--- ==========================================
-
 
 -- Quizzes table
 CREATE TABLE public.quizzes (
@@ -668,12 +603,6 @@ $$;
 
 GRANT EXECUTE ON FUNCTION public.next_unit_order_index(uuid) TO authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260718160808_f5646d46-82c6-48ab-9b57-91881049c8fe.sql
--- ==========================================
-
-
 CREATE TABLE public.quiz_questions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   quiz_id uuid NOT NULL REFERENCES public.quizzes(id) ON DELETE CASCADE,
@@ -724,12 +653,6 @@ CREATE POLICY "Admins manage quiz question options" ON public.quiz_question_opti
   USING (public.has_role(auth.uid(), 'admin'))
   WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
-
--- ==========================================
--- MIGRATION: 20260718160827_408102ad-ea9e-41e3-ae49-29e51fb30753.sql
--- ==========================================
-
-
 CREATE POLICY "Signed-in users can read quiz images"
   ON storage.objects FOR SELECT TO authenticated
   USING (bucket_id = 'quiz-images');
@@ -745,12 +668,6 @@ CREATE POLICY "Admins can update quiz images"
 CREATE POLICY "Admins can delete quiz images"
   ON storage.objects FOR DELETE TO authenticated
   USING (bucket_id = 'quiz-images' AND public.has_role(auth.uid(), 'admin'));
-
-
--- ==========================================
--- MIGRATION: 20260718161613_278453ec-b2d3-4411-a766-e533c02764ef.sql
--- ==========================================
-
 
 -- ============ quiz_attempts ============
 CREATE TABLE public.quiz_attempts (
@@ -1384,12 +1301,6 @@ $$;
 
 GRANT EXECUTE ON FUNCTION public.get_unit_quizzes(uuid) TO authenticated, anon;
 
-
--- ==========================================
--- MIGRATION: 20260718162148_3b495295-9d25-43bc-8cab-30caf6532f7e.sql
--- ==========================================
-
-
 -- Admin UPDATE policies
 CREATE POLICY "Admins update all attempts" ON public.quiz_attempts
   FOR UPDATE TO authenticated
@@ -1530,12 +1441,6 @@ BEGIN
 END;
 $$;
 
-
--- ==========================================
--- MIGRATION: 20260718162655_81a751f8-c7e7-4c1a-81ca-09c188bbc2cb.sql
--- ==========================================
-
-
 CREATE OR REPLACE FUNCTION public.list_quiz_attempts(
   _user_search text DEFAULT NULL,
   _course_id uuid DEFAULT NULL,
@@ -1638,12 +1543,6 @@ BEGIN
   OFFSET GREATEST(COALESCE(_offset, 0), 0);
 END;
 $$;
-
-
--- ==========================================
--- MIGRATION: 20260719111546_3c610cba-f137-4ea2-b474-53ee0a963bb8.sql
--- ==========================================
-
 
 -- ============= PHASE 20: Profile phone fields =============
 ALTER TABLE public.profiles
@@ -1879,12 +1778,6 @@ BEGIN
 END;
 $$;
 
-
--- ==========================================
--- MIGRATION: 20260719111927_fa3003a0-20fe-429c-a40d-e4dc7ad7709d.sql
--- ==========================================
-
-
 DROP FUNCTION IF EXISTS public.get_question_analysis(uuid, int);
 CREATE OR REPLACE FUNCTION public.get_question_analysis(_quiz_id uuid, _form int)
 RETURNS TABLE (
@@ -1939,12 +1832,6 @@ BEGIN
 END;
 $$;
 GRANT EXECUTE ON FUNCTION public.get_question_analysis(uuid, int) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260719112755_02f7cd3b-3472-4793-a15f-49ddbf0f39fd.sql
--- ==========================================
-
 
 -- Phase 21 + 22 migration
 
@@ -2085,12 +1972,6 @@ BEGIN
   END LOOP;
 END $$;
 
-
--- ==========================================
--- MIGRATION: 20260719112816_ca5b6648-c6c4-4bb1-a8a2-52239a254d64.sql
--- ==========================================
-
-
 DROP POLICY IF EXISTS "Avatars are viewable" ON storage.objects;
 CREATE POLICY "Avatars are viewable" ON storage.objects
   FOR SELECT USING (bucket_id = 'avatars');
@@ -2118,12 +1999,6 @@ CREATE POLICY "Users delete own avatar" ON storage.objects
     bucket_id = 'avatars'
     AND (auth.uid()::text = (storage.foldername(name))[1] OR public.has_role(auth.uid(),'admin'))
   );
-
-
--- ==========================================
--- MIGRATION: 20260719114209_d1fad2ad-1e17-4778-b16b-67682f4e50bb.sql
--- ==========================================
-
 
 -- 1. Ban flag
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_banned boolean NOT NULL DEFAULT false;
@@ -2299,12 +2174,6 @@ BEGIN
 END;
 $$;
 GRANT EXECUTE ON FUNCTION public.admin_student_enrollments(uuid) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260719124300_28728e1e-58b8-49ef-bab5-63851095ebf4.sql
--- ==========================================
-
 
 -- ============ PHASE 24: QR SYSTEM ============
 
@@ -2589,12 +2458,6 @@ SELECT
   '{}'::jsonb
 WHERE NOT EXISTS (SELECT 1 FROM public.card_templates WHERE is_default = true);
 
-
--- ==========================================
--- MIGRATION: 20260719124459_afede148-f621-4391-8582-3e5e11422afd.sql
--- ==========================================
-
-
 -- Card assets storage policies
 DROP POLICY IF EXISTS "card-assets read" ON storage.objects;
 CREATE POLICY "card-assets read" ON storage.objects
@@ -2614,18 +2477,7 @@ DROP POLICY IF EXISTS "card-assets admin delete" ON storage.objects;
 CREATE POLICY "card-assets admin delete" ON storage.objects
   FOR DELETE TO authenticated
   USING (bucket_id = 'card-assets' AND public.has_role(auth.uid(), 'admin'));
-
-
--- ==========================================
--- MIGRATION: 20260719135708_4f96a3bd-8727-4a3e-8bf5-3a2cc75871b7.sql
--- ==========================================
-
 INSERT INTO public.qr_display_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
-
--- ==========================================
--- MIGRATION: 20260719135753_86980547-876c-4b91-9a80-375e9d34c42a.sql
--- ==========================================
-
 CREATE OR REPLACE FUNCTION public.get_student_qr_snapshot(_token uuid)
  RETURNS jsonb
  LANGUAGE plpgsql
@@ -2736,11 +2588,6 @@ END;
 $function$;
 
 GRANT EXECUTE ON FUNCTION public.get_student_qr_snapshot(uuid) TO anon, authenticated;
-
--- ==========================================
--- MIGRATION: 20260719140220_9c505078-ca81-42b6-9efb-3f7b80336755.sql
--- ==========================================
-
 
 ALTER TABLE public.qr_display_settings
   ADD COLUMN IF NOT EXISTS show_enrolled_courses_list boolean NOT NULL DEFAULT true,
@@ -2885,12 +2732,6 @@ $function$;
 
 GRANT EXECUTE ON FUNCTION public.get_student_qr_snapshot(uuid) TO anon, authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260719143820_1d866b16-c694-4a3c-9ea1-3f8c4d931f54.sql
--- ==========================================
-
-
 -- Fix 1: handle_new_user must never trust client-supplied role
 CREATE OR REPLACE FUNCTION public.handle_new_user()
  RETURNS trigger
@@ -2946,12 +2787,6 @@ DROP TRIGGER IF EXISTS trg_prevent_privileged_profile_updates ON public.profiles
 CREATE TRIGGER trg_prevent_privileged_profile_updates
 BEFORE UPDATE ON public.profiles
 FOR EACH ROW EXECUTE FUNCTION public.prevent_privileged_profile_updates();
-
-
--- ==========================================
--- MIGRATION: 20260721094518_0d79a6b3-ff10-495e-9cb0-c272d3d2b0aa.sql
--- ==========================================
-
 
 -- Assignments (unit content, alongside lessons + quizzes)
 CREATE TABLE IF NOT EXISTS public.assignments (
@@ -3063,12 +2898,6 @@ AS $function$
   ) t;
 $function$;
 
-
--- ==========================================
--- MIGRATION: 20260721094539_fce68b39-792d-4b67-9329-9ecc066ba413.sql
--- ==========================================
-
-
 CREATE POLICY "assignment-files admin read"
   ON storage.objects FOR SELECT TO authenticated
   USING (bucket_id = 'assignment-files' AND public.has_role(auth.uid(), 'admin'));
@@ -3099,12 +2928,6 @@ CREATE POLICY "assignment-files admin update"
 CREATE POLICY "assignment-files admin delete"
   ON storage.objects FOR DELETE TO authenticated
   USING (bucket_id = 'assignment-files' AND public.has_role(auth.uid(), 'admin'));
-
-
--- ==========================================
--- MIGRATION: 20260721095504_90c1410f-79a3-4bc1-9210-64fd3be44822.sql
--- ==========================================
-
 
 -- Helper: is the assignment window currently open?
 CREATE OR REPLACE FUNCTION public.assignment_window_open(_assignment_id uuid)
@@ -3242,12 +3065,6 @@ CREATE POLICY "Delete own submission storage"
     bucket_id = 'assignment-submissions'
     AND auth.uid()::text = (storage.foldername(name))[1]
   );
-
-
--- ==========================================
--- MIGRATION: 20260721095909_e4cc2a6e-99dd-457e-b01f-a93e02ab0b4e.sql
--- ==========================================
-
 
 -- 1. Extend assignment_submissions with grading columns
 ALTER TABLE public.assignment_submissions
@@ -3417,12 +3234,6 @@ BEGIN
   OFFSET GREATEST(COALESCE(_offset, 0), 0);
 END;
 $$;
-
-
--- ==========================================
--- MIGRATION: 20260721100601_333581a3-d49a-404d-b10e-1c34d0f3a6c9.sql
--- ==========================================
-
 
 -- Phase 32: Assignment awareness for QR snapshot
 ALTER TABLE public.qr_display_settings
@@ -3606,12 +3417,6 @@ BEGIN
 END;
 $function$;
 
-
--- ==========================================
--- MIGRATION: 20260721102225_72c5279b-8c03-44da-ab75-6a95cde1ba10.sql
--- ==========================================
-
-
 -- 1. Courses: pricing columns
 ALTER TABLE public.courses
   ADD COLUMN IF NOT EXISTS is_paid boolean NOT NULL DEFAULT false,
@@ -3684,12 +3489,6 @@ SELECT p.id, 0 FROM public.profiles p
 WHERE p.role = 'student'
   AND NOT EXISTS (SELECT 1 FROM public.wallets w WHERE w.user_id = p.id)
 ON CONFLICT (user_id) DO NOTHING;
-
-
--- ==========================================
--- MIGRATION: 20260721102950_044d57f2-eb69-46cb-a7c4-dcf45da8b892.sql
--- ==========================================
-
 
 -- ============ top_up_cards ============
 CREATE TABLE public.top_up_cards (
@@ -3874,12 +3673,6 @@ INSERT INTO public.top_up_cards (code, value_piastres, expires_at) VALUES
   ('100003', 20000, NULL),  -- 200 EGP
   ('100004', 2500, NULL),   -- 25 EGP
   ('100005', 50000, NULL);  -- 500 EGP
-
-
--- ==========================================
--- MIGRATION: 20260721103441_c8ce2c85-cccb-4731-a73c-62a5a78fbec8.sql
--- ==========================================
-
 
 -- Phase 35: Admin Wallet & Cards RPCs
 
@@ -4130,12 +3923,6 @@ BEGIN
   OFFSET GREATEST(COALESCE(_offset,0),0);
 END;
 $$;
-
-
--- ==========================================
--- MIGRATION: 20260721104210_58e86630-f0a4-4a2f-a0cf-90db8e972d1e.sql
--- ==========================================
-
 
 -- ============================================================
 -- payment_gateways
@@ -4607,12 +4394,6 @@ BEGIN
   );
 END;
 $function$;
-
-
--- ==========================================
--- MIGRATION: 20260721112842_baa6ecbb-824f-42ad-b27a-7f4cd4e5f278.sql
--- ==========================================
-
 -- Phase 39: Academic Performance — Assignment Analytics
 
 -- 1) Most-problematic assignments (ranked by count of students whose outcome is 'failed' OR 'not_submitted')
@@ -4824,11 +4605,6 @@ BEGIN
   OFFSET GREATEST(COALESCE(_offset, 0), 0);
 END;
 $$;
-
--- ==========================================
--- MIGRATION: 20260721154753_9ef89c70-6c3d-4447-a4af-c1d6d9d09236.sql
--- ==========================================
-
 CREATE OR REPLACE FUNCTION public.resolve_login_email(_identifier text)
 RETURNS text
 LANGUAGE plpgsql
@@ -4848,11 +4624,6 @@ BEGIN
   RETURN lower(v_id);
 END;
 $$;
-
--- ==========================================
--- MIGRATION: 20260722080505_497fd002-1fc4-4eac-a593-5584c63f8791.sql
--- ==========================================
-
 
 -- 1. Extend payment_gateways
 ALTER TABLE public.payment_gateways
@@ -5283,12 +5054,6 @@ GRANT EXECUTE ON FUNCTION public.admin_reject_payment_request(uuid,text) TO auth
 GRANT EXECUTE ON FUNCTION public.admin_list_payment_requests(text,text,integer,integer) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.student_list_own_payment_requests() TO authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260722080529_749e5935-f449-480f-b83f-ba9f1ee146b8.sql
--- ==========================================
-
-
 DROP POLICY IF EXISTS "payment proofs owner insert" ON storage.objects;
 CREATE POLICY "payment proofs owner insert" ON storage.objects FOR INSERT TO authenticated
   WITH CHECK (
@@ -5312,12 +5077,6 @@ CREATE POLICY "payment proofs owner update" ON storage.objects FOR UPDATE TO aut
     bucket_id = 'payment-proofs'
     AND (storage.foldername(name))[1] = auth.uid()::text
   );
-
-
--- ==========================================
--- MIGRATION: 20260722081450_e2576e1d-2b74-46e8-88c6-47f83ccaaeae.sql
--- ==========================================
-
 
 -- 1) Extend payment_transactions status
 ALTER TABLE public.payment_transactions DROP CONSTRAINT IF EXISTS payment_transactions_status_check;
@@ -5592,12 +5351,6 @@ BEGIN
 END;
 $fn$;
 
-
--- ==========================================
--- MIGRATION: 20260722083703_13ee0fa1-57dc-49e1-a005-c1c027084f0d.sql
--- ==========================================
-
-
 -- 1. Column for storing gateway-specific identifiers (e.g. Fawaterak invoice_id/invoice_key)
 ALTER TABLE public.payment_transactions
   ADD COLUMN IF NOT EXISTS gateway_metadata jsonb NOT NULL DEFAULT '{}'::jsonb;
@@ -5639,12 +5392,6 @@ $$;
 REVOKE ALL ON FUNCTION public.expire_stale_fawaterak_pending() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.expire_stale_fawaterak_pending() TO authenticated;
 GRANT EXECUTE ON FUNCTION public.expire_stale_fawaterak_pending() TO service_role;
-
-
--- ==========================================
--- MIGRATION: 20260722084822_82aa4ba4-7d80-4c89-a74a-2f975a2d0a2e.sql
--- ==========================================
-
 
 CREATE TABLE public.payment_gateway_methods (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -5725,18 +5472,7 @@ BEGIN
     ON CONFLICT (gateway_id, method_key) DO NOTHING;
   END LOOP;
 END $$;
-
-
--- ==========================================
--- MIGRATION: 20260722095823_4ca83cc1-3420-4aad-b4b7-61dfc77533f4.sql
--- ==========================================
-
 ALTER TABLE public.payment_gateway_methods ADD COLUMN IF NOT EXISTS description text;
-
--- ==========================================
--- MIGRATION: 20260722113147_98aea923-aa18-4e10-9a7c-7840fd727d63.sql
--- ==========================================
-
 
 -- 1) Restrict manual payment method details to signed-in users
 REVOKE SELECT ON public.manual_payment_methods FROM anon;
@@ -5806,12 +5542,6 @@ BEGIN
   RETURN jsonb_build_object('attempt', attempt_json, 'questions', COALESCE(qs, '[]'::jsonb));
 END;
 $function$;
-
-
--- ==========================================
--- MIGRATION: 20260722125715_de9072fe-bac3-4f73-8ff2-16138a81d277.sql
--- ==========================================
-
 
 -- 1) courses.content_drip_enabled
 ALTER TABLE public.courses
@@ -6094,12 +5824,6 @@ BEGIN
   RETURN v_attempt_id;
 END;
 $$;
-
-
--- ==========================================
--- MIGRATION: 20260722130833_33b87e44-010e-46c3-a080-907518cd667c.sql
--- ==========================================
-
 
 -- =========================================================================
 -- PHASE 48 — Course Bundles: schema + purchase / finalize RPCs
@@ -6424,12 +6148,6 @@ BEGIN
   ORDER BY b.created_at DESC;
 END; $$;
 
-
--- ==========================================
--- MIGRATION: 20260722131736_44225ed1-f161-4cef-a9a0-60a50a898cc4.sql
--- ==========================================
-
-
 -- Phase 47 (attempt 3): drop dependent policies on both courses and units
 DROP POLICY IF EXISTS courses_select_published ON public.courses;
 DROP POLICY IF EXISTS courses_admin_all ON public.courses;
@@ -6713,12 +6431,6 @@ SELECT cron.schedule(
   '* * * * *',
   $cron$ SELECT public.auto_publish_scheduled_courses(); $cron$
 );
-
-
--- ==========================================
--- MIGRATION: 20260722134223_8f2d048a-763d-4c28-9046-30eb8e1a7c27.sql
--- ==========================================
-
 
 -- =========================================================================
 -- PHASE 49 — Featured flag on courses & bundles + discount analytics
@@ -7178,12 +6890,6 @@ BEGIN
 
   RETURN jsonb_build_object('success', true, 'transaction_id', v_txn_id, 'reference_number', v_ref);
 END; $$;
-
-
--- ==========================================
--- MIGRATION: 20260722135549_2a15b0c0-51f7-487f-a38c-67d4fc36e9cc.sql
--- ==========================================
-
 
 -- =========================================================
 -- PHASE 50: Leaderboard Foundation
@@ -7667,12 +7373,6 @@ GRANT EXECUTE ON FUNCTION public.award_admin_adjustment(uuid, integer, text) TO 
 GRANT EXECUTE ON FUNCTION public.leaderboard_top(integer, integer) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.leaderboard_eligible_count() TO authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260722135604_c2c9f135-3625-4dc1-9aeb-17cad79ad3a5.sql
--- ==========================================
-
-
 ALTER VIEW public.leaderboard_eligible_students SET (security_invoker = on);
 
 REVOKE EXECUTE ON FUNCTION public.student_points_total(uuid) FROM PUBLIC, anon;
@@ -7685,12 +7385,6 @@ REVOKE EXECUTE ON FUNCTION public.award_admin_adjustment(uuid, integer, text) FR
 REVOKE EXECUTE ON FUNCTION public.leaderboard_top(integer, integer) FROM PUBLIC, anon;
 REVOKE EXECUTE ON FUNCTION public.leaderboard_eligible_count() FROM PUBLIC, anon;
 REVOKE EXECUTE ON FUNCTION public._award_points(uuid, text, text, uuid, integer) FROM PUBLIC, anon;
-
-
--- ==========================================
--- MIGRATION: 20260723111517_6593c1b3-c039-4139-9446-a9f23b5ef207.sql
--- ==========================================
-
 
 -- =============== 1. profiles.leaderboard_visible ===============
 ALTER TABLE public.profiles
@@ -8058,12 +7752,6 @@ AS $$
 $$;
 GRANT EXECUTE ON FUNCTION public.student_earned_badges(uuid) TO anon, authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260723111602_6dcccabd-3f63-4af1-afb4-0a23c348d47b.sql
--- ==========================================
-
-
 CREATE OR REPLACE FUNCTION public._award_points(p_student uuid, p_event_key text, p_source_kind text, p_source_id uuid, p_delta_override integer DEFAULT NULL::integer)
  RETURNS void
  LANGUAGE plpgsql
@@ -8093,12 +7781,6 @@ BEGIN
   ON CONFLICT (student_id, source_kind, source_id, event_key) WHERE source_id IS NOT NULL DO NOTHING;
 END;
 $function$;
-
-
--- ==========================================
--- MIGRATION: 20260723111619_1c3d5ae3-4be2-4fb4-a701-1681d08f8343.sql
--- ==========================================
-
 
 CREATE OR REPLACE FUNCTION public.leaderboard_top_full(p_limit integer, p_offset integer)
 RETURNS TABLE(
@@ -8138,12 +7820,6 @@ AS $$
   LIMIT COALESCE(p_limit, 20) OFFSET COALESCE(p_offset, 0);
 $$;
 GRANT EXECUTE ON FUNCTION public.leaderboard_top_full(integer, integer) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260723114506_9952c8a7-985c-41e5-a01b-7a7234b582ed.sql
--- ==========================================
-
 
 CREATE OR REPLACE FUNCTION public.prevent_assignment_self_grade()
 RETURNS TRIGGER
@@ -8224,12 +7900,6 @@ USING (
   )
 );
 
-
--- ==========================================
--- MIGRATION: 20260723215741_bf344ee1-27a2-49f3-8577-7a16b2fc770e.sql
--- ==========================================
-
-
 -- 1) manual_payment_methods: only enabled rows readable by regular auth users
 DROP POLICY IF EXISTS "manual methods readable authenticated" ON public.manual_payment_methods;
 CREATE POLICY "manual methods readable when enabled"
@@ -8309,12 +7979,6 @@ REVOKE EXECUTE ON FUNCTION public._maintain_featured_at() FROM authenticated;
 REVOKE EXECUTE ON FUNCTION public._stable_uuid(text) FROM authenticated;
 REVOKE EXECUTE ON FUNCTION public.badge_conditions_no_self_ref() FROM authenticated;
 REVOKE EXECUTE ON FUNCTION public.auto_publish_scheduled_courses() FROM authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260723221129_ee5562d4-0bc0-4fc9-bf1c-292716ecb60d.sql
--- ==========================================
-
 
 -- ========== BOOKS ==========
 CREATE TABLE public.books (
@@ -8428,12 +8092,6 @@ CREATE POLICY "book_assets_admin_all" ON storage.objects
   USING (bucket_id = 'book-assets' AND public.has_role(auth.uid(), 'admin'))
   WITH CHECK (bucket_id = 'book-assets' AND public.has_role(auth.uid(), 'admin'));
 
-
--- ==========================================
--- MIGRATION: 20260724125002_f4b191d3-60f5-4431-a940-8457cb8a7ab0.sql
--- ==========================================
-
-
 -- Reusable updated_at trigger (already exists in project as update_updated_at_column)
 
 -- SHIPPING SETTINGS (singleton)
@@ -8516,12 +8174,6 @@ REVOKE EXECUTE ON FUNCTION public.enforce_digital_cart_quantity() FROM PUBLIC, a
 CREATE TRIGGER trg_book_cart_digital_qty
   BEFORE INSERT OR UPDATE ON public.book_cart_items
   FOR EACH ROW EXECUTE FUNCTION public.enforce_digital_cart_quantity();
-
-
--- ==========================================
--- MIGRATION: 20260724125900_04547456-8503-4b17-91a3-0d441d02ba11.sql
--- ==========================================
-
 
 -- ============================================================================
 -- Phase 55: Book Checkout, Orders + Payment (incl. Cash on Delivery)
@@ -9166,22 +8818,10 @@ END; $$;
 REVOKE EXECUTE ON FUNCTION public.get_book_order_detail(uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.get_book_order_detail(uuid) TO authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260724130426_ba86181c-2cb5-4ba1-ae5f-4d529d672032.sql
--- ==========================================
-
-
 GRANT EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.leaderboard_public_top10() TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.auto_publish_scheduled_courses() TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.get_lessons_public() TO anon, authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260724130930_b77763ff-9992-4a00-a186-3574af63785f.sql
--- ==========================================
-
 
 -- Extend wallet transaction types to allow refunds
 ALTER TABLE public.wallet_transactions DROP CONSTRAINT IF EXISTS wallet_transactions_type_check;
@@ -9604,12 +9244,6 @@ END; $$;
 REVOKE EXECUTE ON FUNCTION public.list_my_book_orders() FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.list_my_book_orders() TO authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260724131010_d888833f-c5db-4ca0-8f46-dab73983429b.sql
--- ==========================================
-
-
 CREATE OR REPLACE FUNCTION public.admin_list_book_orders(
   p_status text DEFAULT NULL,
   p_gateway_key text DEFAULT NULL,
@@ -9751,12 +9385,6 @@ BEGIN
     'refund_requests', v_refund
   );
 END; $$;
-
-
--- ==========================================
--- MIGRATION: 20260724143236_f45a609b-8376-4e1a-b0ef-6a292bcc936e.sql
--- ==========================================
-
 
 -- 1) Extend book_order_refund_requests
 ALTER TABLE public.book_order_refund_requests
@@ -10173,19 +9801,8 @@ BEGIN
 END; $$;
 REVOKE EXECUTE ON FUNCTION public.list_my_book_orders() FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.list_my_book_orders() TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260724154505_46674508-bfd1-45a5-a7be-e47711961a20.sql
--- ==========================================
-
 -- Phase 58 Step 1: Add 'parent' value to the app_role enum in its own transaction
 ALTER TYPE public.app_role ADD VALUE IF NOT EXISTS 'parent';
-
--- ==========================================
--- MIGRATION: 20260724154620_fbed13c9-3f85-41bf-9d8d-33d72b382499.sql
--- ==========================================
-
 -- ============================================================================
 -- PHASE 58 — Parent Portal
 -- ============================================================================
@@ -10242,7 +9859,7 @@ DROP TRIGGER IF EXISTS parent_links_touch ON public.parent_student_links;
 CREATE TRIGGER parent_links_touch BEFORE UPDATE ON public.parent_student_links
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
--- 2) Extend handle_new_user to allow self-selected 'parent' role at signup
+-- 2) Extend handle_new_user to allow self-selected 'parent' role at signup and 'admin' role at admin creation
 CREATE OR REPLACE FUNCTION public.handle_new_user()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -10253,8 +9870,10 @@ DECLARE
   m jsonb := COALESCE(NEW.raw_user_meta_data, '{}'::jsonb);
   v_role public.app_role := 'student'::public.app_role;
 BEGIN
-  IF NULLIF(m->>'intended_role','') = 'parent' THEN
+  IF NULLIF(m->>'intended_role','') = 'parent' OR NULLIF(m->>'role','') = 'parent' THEN
     v_role := 'parent'::public.app_role;
+  ELSIF NULLIF(m->>'intended_role','') = 'admin' OR NULLIF(m->>'role','') = 'admin' THEN
+    v_role := 'admin'::public.app_role;
   END IF;
 
   INSERT INTO public.profiles (
@@ -10274,7 +9893,9 @@ BEGIN
     CASE WHEN NULLIF(m->>'stage_id','') IS NOT NULL THEN (m->>'stage_id')::uuid ELSE NULL END,
     COALESCE(m->'custom_fields', '{}'::jsonb)
   )
-  ON CONFLICT (id) DO NOTHING;
+  ON CONFLICT (id) DO UPDATE SET
+    role = EXCLUDED.role,
+    full_name = CASE WHEN EXCLUDED.full_name <> '' THEN EXCLUDED.full_name ELSE public.profiles.full_name END;
   RETURN NEW;
 END;
 $function$;
@@ -10644,11 +10265,6 @@ ALTER TABLE public.payment_transactions
 CREATE INDEX IF NOT EXISTS ptx_on_behalf_idx
   ON public.payment_transactions(on_behalf_of_user_id)
   WHERE on_behalf_of_user_id IS NOT NULL;
-
--- ==========================================
--- MIGRATION: 20260724155521_61943173-fda3-4ef8-9f9d-6fd4d139a290.sql
--- ==========================================
-
 DROP FUNCTION IF EXISTS public.admin_list_students(text, jsonb, jsonb, integer, integer);
 
 CREATE OR REPLACE FUNCTION public.admin_list_students(
@@ -10740,11 +10356,6 @@ $function$;
 
 GRANT EXECUTE ON FUNCTION public.admin_list_students(text, jsonb, jsonb, integer, integer) TO authenticated;
 REVOKE EXECUTE ON FUNCTION public.admin_list_students(text, jsonb, jsonb, integer, integer) FROM anon, PUBLIC;
-
--- ==========================================
--- MIGRATION: 20260724160433_ac172a38-81d8-492f-8bf7-76b0e03e28ab.sql
--- ==========================================
-
 
 -- 1. book_orders: extend status enum + add delivery_failed_at
 ALTER TABLE public.book_orders DROP CONSTRAINT IF EXISTS book_orders_status_check;
@@ -11147,23 +10758,11 @@ GRANT EXECUTE ON FUNCTION public.change_book_order_status(uuid, text, text, bool
 REVOKE ALL ON FUNCTION public.create_book_order(text, uuid, jsonb, uuid, text, text) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.create_book_order(text, uuid, jsonb, uuid, text, text) TO authenticated, service_role;
 
-
--- ==========================================
--- MIGRATION: 20260724161155_b29503b1-1358-4553-9966-fc5b1bee74f4.sql
--- ==========================================
-
-
 -- Revoke sensitive digital-book columns from anonymous role only.
 -- Public catalog page (Books.tsx) does not select these columns, so browsing is unaffected.
 -- Admins and purchasers use the authenticated role, which keeps full access.
 REVOKE SELECT (digital_file_url, download_limit, is_drm_protected)
   ON public.books FROM anon;
-
-
--- ==========================================
--- MIGRATION: 20260724163033_c6a9f449-cec8-4553-8afb-818d02a1939e.sql
--- ==========================================
-
 
 -- Admin: list parents with linked-student and request counts
 CREATE OR REPLACE FUNCTION public.admin_list_parents(_search text DEFAULT NULL)
@@ -11261,12 +10860,6 @@ $$;
 REVOKE ALL ON FUNCTION public.admin_get_parent_links(uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.admin_get_parent_links(uuid) TO authenticated;
 
-
--- ==========================================
--- MIGRATION: 20260727000001_d4f8a2b3-5c6e-4d7f-8e9a-0b1c2d3e4f5a.sql
--- ==========================================
-
-
 -- Phase 61: Platform Settings singleton table
 -- Stores logo URLs, social links, and hero section content
 
@@ -11322,12 +10915,6 @@ CREATE POLICY "Admins update platform settings"
 CREATE TRIGGER update_platform_settings_updated_at
   BEFORE UPDATE ON public.platform_settings
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
-
-
--- ==========================================
--- MIGRATION: 20260727000002_4e7f9d12-3b5c-4f8e-9a1b-2c3d4e5f6a7b.sql
--- ==========================================
-
 -- Phase 62: Primary Admin Protection + All Users listing function
 
 -- ─── 1. Add is_primary_admin to profiles ─────────────────────────────────────
@@ -11426,12 +11013,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.admin_list_all_users(TEXT, TEXT, INTEGER, INTEGER) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000003_fix_admin_list_all_users.sql
--- ==========================================
-
 -- Fix admin_list_all_users RPC function
 DROP FUNCTION IF EXISTS public.admin_list_all_users(text, text, integer, integer);
 
@@ -11510,12 +11091,6 @@ $$;
 
 REVOKE ALL ON FUNCTION public.admin_list_all_users(text, text, integer, integer) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.admin_list_all_users(text, text, integer, integer) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000004_phase63_instructor_profiles.sql
--- ==========================================
-
 -- Phase 63: Public Instructor / Publisher Profile
 
 -- 1. Add bio and social_links to profiles
@@ -11559,12 +11134,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.get_public_instructor_profile(UUID) TO anon, authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000005_phase64_purchase_codes.sql
--- ==========================================
-
 -- Phase 64: Purchase Codes System
 
 -- 1. Create purchase_codes table
@@ -11865,12 +11434,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.redeem_purchase_code(text) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000006_fix_admin_list_purchase_codes.sql
--- ==========================================
-
 -- Fix admin_list_purchase_codes RPC function
 DROP FUNCTION IF EXISTS public.admin_list_purchase_codes(text, text, integer, integer);
 
@@ -11968,12 +11531,6 @@ $$;
 
 REVOKE ALL ON FUNCTION public.admin_list_purchase_codes(text, text, integer, integer) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.admin_list_purchase_codes(text, text, integer, integer) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000007_fix_ambiguous_column_use_count.sql
--- ==========================================
-
 -- Fix ambiguous column reference "use_count" in admin_list_purchase_codes and admin_delete_used_purchase_codes
 DROP FUNCTION IF EXISTS public.admin_list_purchase_codes(text, text, integer, integer);
 
@@ -12098,12 +11655,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.admin_delete_used_purchase_codes() TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000008_phase66_notifications.sql
--- ==========================================
-
 -- Phase 66: Notifications Data Model & RPCs
 
 -- 1. Create notifications table
@@ -12235,12 +11786,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.seed_sample_notifications_for_me() TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000009_phase67_notification_triggers.sql
--- ==========================================
-
 -- Phase 67: Notification Triggers (Student & Admin Events)
 
 -- 1. Helper columns on profiles for Level Up & Leaderboard notifications state
@@ -12693,12 +12238,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.check_student_level_and_rank_notifications(uuid) TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000010_phase67_rpc_extensions.sql
--- ==========================================
-
 -- Phase 67: Extend existing RPC functions with notification calls
 
 -- 1. Trigger for student points ledger to automatically run Level Up & Leaderboard Top 10 checks
@@ -13020,12 +12559,6 @@ DROP TRIGGER IF EXISTS trg_parent_link_request_notifications ON public.parent_st
 CREATE TRIGGER trg_parent_link_request_notifications
   AFTER INSERT OR UPDATE ON public.parent_student_links
   FOR EACH ROW EXECUTE FUNCTION public.trg_notify_on_parent_link_request_created();
-
-
--- ==========================================
--- MIGRATION: 20260727000011_phase68_parent_notifications.sql
--- ==========================================
-
 -- Phase 68: Parent Notification Triggers & Shared Helper
 
 -- 1. Shared helper to notify all approved parents of a student
@@ -13498,12 +13031,6 @@ BEGIN
   RETURN NEW;
 END;
 $$;
-
-
--- ==========================================
--- MIGRATION: 20260727000012_phase69_whatsapp.sql
--- ==========================================
-
 -- Phase 69: WhatsApp Delivery System via Rasvio
 
 -- 1. Create Tables
@@ -13974,12 +13501,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.admin_trigger_whatsapp_dispatcher() TO authenticated;
-
-
--- ==========================================
--- MIGRATION: 20260727000013_phase69b_whatsapp_cron.sql
--- ==========================================
-
 -- Phase 69b: Schedule WhatsApp Dispatcher via pg_cron
 -- Runs every minute, processes up to 50 queued messages per batch
 
@@ -13993,7 +13514,6 @@ SELECT cron.schedule(
   '* * * * *',
   $$SELECT public.process_whatsapp_queue_batch(50)$$
 );
-
 -- Phase 70: Branches/Locations Page + Student Testimonials
 
 -- 1. Create branches table
@@ -14147,56 +13667,3 @@ WHERE NOT EXISTS (SELECT 1 FROM public.testimonials WHERE image_url LIKE '%59991
 INSERT INTO public.testimonials (image_url, student_name, order_index, is_visible)
 SELECT '/testimonials/5999141763244822466.jpg', NULL, 7, true
 WHERE NOT EXISTS (SELECT 1 FROM public.testimonials WHERE image_url LIKE '%5999141763244822466.jpg');
--- Fix handle_new_user trigger to properly set admin role when role='admin' or intended_role='admin' is passed in user_metadata
-CREATE OR REPLACE FUNCTION public.handle_new_user()
- RETURNS trigger
- LANGUAGE plpgsql
- SECURITY DEFINER
- SET search_path TO 'public'
-AS $function$
-DECLARE
-  m jsonb := COALESCE(NEW.raw_user_meta_data, '{}'::jsonb);
-  v_role public.app_role := 'student'::public.app_role;
-BEGIN
-  IF NULLIF(m->>'intended_role','') = 'parent' OR NULLIF(m->>'role','') = 'parent' THEN
-    v_role := 'parent'::public.app_role;
-  ELSIF NULLIF(m->>'intended_role','') = 'admin' OR NULLIF(m->>'role','') = 'admin' THEN
-    v_role := 'admin'::public.app_role;
-  END IF;
-
-  INSERT INTO public.profiles (
-    id, full_name, role, phone_number, guardian_phone, email, auth_email,
-    governorate, registration_type, gender, stage_id, custom_fields
-  ) VALUES (
-    NEW.id,
-    COALESCE(m->>'full_name', m->>'name', ''),
-    v_role,
-    NULLIF(m->>'phone_number',''),
-    NULLIF(m->>'guardian_phone',''),
-    NULLIF(m->>'real_email',''),
-    NEW.email,
-    NULLIF(m->>'governorate',''),
-    NULLIF(m->>'registration_type',''),
-    NULLIF(m->>'gender',''),
-    CASE WHEN NULLIF(m->>'stage_id','') IS NOT NULL THEN (m->>'stage_id')::uuid ELSE NULL END,
-    COALESCE(m->'custom_fields', '{}'::jsonb)
-  )
-  ON CONFLICT (id) DO UPDATE SET
-    role = EXCLUDED.role,
-    full_name = CASE WHEN EXCLUDED.full_name <> '' THEN EXCLUDED.full_name ELSE public.profiles.full_name END;
-
-  RETURN NEW;
-END;
-$function$;
-
--- Update any existing admin user whose profile role was wrongly set to student
-UPDATE public.profiles p
-SET role = 'admin'::public.app_role
-FROM auth.users u
-WHERE p.id = u.id
-  AND (
-    u.raw_user_meta_data->>'role' = 'admin'
-    OR u.raw_user_meta_data->>'intended_role' = 'admin'
-    OR u.raw_app_meta_data->>'role' = 'admin'
-  )
-  AND p.role <> 'admin'::public.app_role;
