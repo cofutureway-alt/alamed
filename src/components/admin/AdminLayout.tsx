@@ -60,6 +60,7 @@ const isGroup = (e: NavEntry): e is GroupItem => (e as GroupItem).children !== u
 
 const nav: NavEntry[] = [
   { to: "/admin", label: "الإحصائيات", icon: BarChart3, end: true },
+  { to: "/admin/renewal-payments", label: "سجل سداد التجديد", icon: Coins },
   {
     id: "academics",
     label: "المحتوى التعليمي",
@@ -101,7 +102,6 @@ const nav: NavEntry[] = [
       { to: "/admin/book-orders", label: "طلبات الكتب", icon: Package },
       { to: "/admin/refund-requests", label: "طلبات الاسترجاع", icon: Inbox },
       { to: "/admin/billing", label: "الفوترة والمدفوعات", icon: Receipt },
-      { to: "/admin/renewal-payments", label: "سجل سداد التجديد", icon: Coins },
     ],
   },
   {
