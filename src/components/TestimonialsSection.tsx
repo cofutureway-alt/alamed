@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, ChevronLeft, MessageSquareQuote, Sparkles, Eye, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, MessageSquareQuote, Eye, X } from "lucide-react";
 import { IslamicDivider, EightPointStar } from "@/components/IslamicPatterns";
 import { fetchPublicTestimonials, TestimonialRow } from "@/lib/testimonials-api";
 import { Card } from "@/components/ui/card";
@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/button";
 export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<TestimonialRow[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -29,21 +30,36 @@ export default function TestimonialsSection() {
     };
   }, []);
 
-  // If loading or zero visible testimonials, hide the entire section gracefully
+  // Autoplay functionality
+  useEffect(() => {
+    if (!testimonials || testimonials.length <= 1 || isPaused || selectedImage) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 4500);
+
+    return () => clearInterval(timer);
+  }, [testimonials, isPaused, selectedImage]);
+
   if (loading || !testimonials || testimonials.length === 0) {
     return null;
   }
 
-  const nextSlide = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
   };
 
-  const prevSlide = () => {
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   return (
-    <section id="testimonials" className="py-24 relative overflow-hidden bg-secondary/20">
+    <section
+      id="testimonials"
+      className="py-24 relative overflow-hidden bg-secondary/20"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       {/* Background Ornaments */}
       <EightPointStar
         size={50}
@@ -57,7 +73,7 @@ export default function TestimonialsSection() {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-2xl mx-auto mb-14 space-y-4">
           <IslamicDivider className="mb-4" />
 
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary shadow-sm">
@@ -74,92 +90,99 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        {/* Mobile Carousel View (< md) */}
-        <div className="md:hidden space-y-4">
-          <div className="relative">
+        {/* Carousel Container */}
+        <div className="relative max-w-6xl mx-auto px-4 md:px-12">
+          {/* Navigation Controls (Arrows) */}
+          {testimonials.length > 1 && (
+            <>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handlePrev}
+                className="absolute right-0 md:-right-2 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-background/80 backdrop-blur-md border border-border shadow-lg hover:border-primary hover:text-primary transition-all"
+                title="السابق"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </Button>
+
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleNext}
+                className="absolute left-0 md:-left-2 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-background/80 backdrop-blur-md border border-border shadow-lg hover:border-primary hover:text-primary transition-all"
+                title="التالي"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </Button>
+            </>
+          )}
+
+          {/* Carousel Slider View */}
+          <div className="overflow-hidden py-4">
             <AnimatePresence mode="wait">
               <motion.div
-                key={testimonials[activeIndex].id}
-                initial={{ opacity: 0, x: 20 }}
+                key={currentIndex}
+                initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
-                <Card className="rounded-2xl border border-border/80 overflow-hidden bg-card shadow-lg p-3">
-                  <div
-                    className="relative aspect-[3/4] rounded-xl overflow-hidden bg-muted cursor-pointer"
-                    onClick={() => setSelectedImage(testimonials[activeIndex].image_url)}
-                  >
-                    <img
-                      src={testimonials[activeIndex].image_url}
-                      alt={testimonials[activeIndex].student_name || "رأي طالب"}
-                      className="w-full h-full object-contain bg-black/40"
-                    />
-                    <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full flex items-center gap-1.5">
-                      <Eye size={12} />
-                      <span>دوس عشان تكبر الصورة</span>
-                    </div>
-                  </div>
-                  {testimonials[activeIndex].student_name && (
-                    <div className="p-3 text-center font-bold text-sm text-foreground">
-                      {testimonials[activeIndex].student_name}
-                    </div>
-                  )}
-                </Card>
+                {/* Calculate visible indices for 3-items carousel */}
+                {[0, 1, 2].map((offset) => {
+                  const idx = (currentIndex + offset) % testimonials.length;
+                  const item = testimonials[idx];
+                  if (!item) return null;
+
+                  return (
+                    <Card
+                      key={`${item.id}-${offset}`}
+                      className={`group relative rounded-2xl border border-border/80 overflow-hidden bg-card/70 backdrop-blur-xl hover:border-primary/50 hover:shadow-2xl transition-all duration-300 cursor-pointer p-3 flex flex-col justify-between ${
+                        offset >= 1 ? "hidden md:flex" : ""
+                      } ${offset >= 2 ? "hidden lg:flex" : ""}`}
+                      onClick={() => setSelectedImage(item.image_url)}
+                    >
+                      <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-muted/50">
+                        <img
+                          src={item.image_url}
+                          alt={item.student_name || `رأي طالب ${idx + 1}`}
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-medium text-xs gap-1.5 backdrop-blur-[2px]">
+                          <Eye size={16} />
+                          <span>دوس عشان تكبر الصورة</span>
+                        </div>
+                      </div>
+
+                      {item.student_name && (
+                        <div className="mt-3 text-center text-sm font-bold text-foreground truncate">
+                          {item.student_name}
+                        </div>
+                      )}
+                    </Card>
+                  );
+                })}
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Carousel Navigation Controls */}
+          {/* Dots Pagination */}
           {testimonials.length > 1 && (
-            <div className="flex items-center justify-between pt-2">
-              <Button variant="outline" size="icon" onClick={prevSlide} className="rounded-full">
-                <ChevronRight className="w-5 h-5" />
-              </Button>
-              <div className="text-xs font-bold text-muted-foreground">
-                {activeIndex + 1} / {testimonials.length}
-              </div>
-              <Button variant="outline" size="icon" onClick={nextSlide} className="rounded-full">
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
+            <div className="flex items-center justify-center gap-2 mt-8">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentIndex(i)}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    i === currentIndex
+                      ? "w-8 bg-primary shadow-sm"
+                      : "w-2.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                  }`}
+                  aria-label={`انتقل للرأي ${i + 1}`}
+                />
+              ))}
             </div>
           )}
-        </div>
-
-        {/* Multi-column Grid View (>= md) */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {testimonials.map((t, idx) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.08 }}
-            >
-              <Card
-                className="group relative rounded-2xl border border-border/80 overflow-hidden bg-card/60 backdrop-blur-xl hover:border-primary/50 hover:shadow-xl transition-all duration-300 cursor-pointer p-3 flex flex-col justify-between"
-                onClick={() => setSelectedImage(t.image_url)}
-              >
-                <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-muted/50">
-                  <img
-                    src={t.image_url}
-                    alt={t.student_name || `رأي طالب ${idx + 1}`}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-medium text-xs gap-1.5 backdrop-blur-[2px]">
-                    <Eye size={16} />
-                    <span>تكبير الصورة</span>
-                  </div>
-                </div>
-
-                {t.student_name && (
-                  <div className="mt-3 text-center text-sm font-bold text-foreground truncate">
-                    {t.student_name}
-                  </div>
-                )}
-              </Card>
-            </motion.div>
-          ))}
         </div>
       </div>
 
