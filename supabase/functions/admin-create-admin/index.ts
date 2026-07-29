@@ -51,8 +51,6 @@ Deno.serve(async (req) => {
     if (existing) return json({ error: "phone_taken" }, 409);
 
     // ── Create user via service role ───────────────────────────────────────
-    // Setting role = 'admin' in metadata ensures the handle_new_user trigger
-    // creates the profile with role = 'admin' and is_primary_admin = false.
     const { data: created, error } = await admin.auth.admin.createUser({
       email: auth_email,
       password,
@@ -60,13 +58,34 @@ Deno.serve(async (req) => {
       user_metadata: {
         full_name: full_name ?? "",
         role: "admin",
+        intended_role: "admin",
         phone_number,
         real_email: real_email ?? null,
+      },
+      app_metadata: {
+        role: "admin",
       },
     });
     if (error) return json({ error: error.message }, 400);
 
-    return json({ user_id: created.user!.id });
+    const newUserId = created.user!.id;
+
+    // ── Guarantee profile role is set to 'admin' in database ────────────────
+    const { error: profileErr } = await admin
+      .from("profiles")
+      .update({
+        role: "admin",
+        is_primary_admin: false,
+        full_name: full_name ?? "",
+        phone_number,
+      })
+      .eq("id", newUserId);
+
+    if (profileErr) {
+      console.error("Failed to set profile role to admin:", profileErr);
+    }
+
+    return json({ user_id: newUserId });
   } catch (e) {
     return json({ error: String((e as any)?.message ?? e) }, 500);
   }
