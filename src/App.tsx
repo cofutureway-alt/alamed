@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import RequireAdmin from "@/components/auth/RequireAdmin";
 import RequireAuth from "@/components/auth/RequireAuth";
+import RequireGuest from "@/components/auth/RequireGuest";
 import AdminLayout from "@/components/admin/AdminLayout";
 import StudentLayout from "@/components/student/StudentLayout";
 import Index from "./pages/Index";
@@ -111,9 +112,9 @@ const App = () => (
           <MobileBottomNav />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/parent-signup" element={<Signup />} />
+            <Route path="/login" element={<RequireGuest><Login /></RequireGuest>} />
+            <Route path="/signup" element={<RequireGuest><Signup /></RequireGuest>} />
+            <Route path="/parent-signup" element={<RequireGuest><Signup /></RequireGuest>} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/bundles" element={<Bundles />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />

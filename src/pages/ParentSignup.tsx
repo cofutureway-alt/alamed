@@ -41,9 +41,16 @@ const ParentSignup = () => {
     });
     if (error) {
       setLoading(false);
-      toast.error(error.message.toLowerCase().includes("already")
-        ? "هذا الحساب مسجّل بالفعل"
-        : error.message);
+      const msg = error.message.toLowerCase();
+      if (msg.includes("already") || msg.includes("registered")) {
+        toast.error("هذا الحساب مسجّل بالفعل");
+      } else if (msg.includes("invalid") || msg.includes("email")) {
+        toast.error("حدث خطأ في إنشاء الحساب. تأكد من صحة البيانات وحاول مجدداً");
+      } else if (msg.includes("weak") || msg.includes("password")) {
+        toast.error("كلمة المرور ضعيفة، يرجى اختيار كلمة مرور أقوى");
+      } else {
+        toast.error("فشل إنشاء الحساب، حاول مجدداً");
+      }
       return;
     }
     await supabase.auth.signInWithPassword({ email: authEmail, password });

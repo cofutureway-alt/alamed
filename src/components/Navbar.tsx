@@ -106,7 +106,7 @@ const Navbar = () => {
             <DropdownMenuLabel className="text-xs font-normal">
               <div className="font-bold">{profile?.full_name || "مستخدم"}</div>
               <div className="text-muted-foreground truncate" dir="ltr">
-                {profile?.phone_number || profile?.email || (user.email && !user.email.endsWith("@internal.noemail.local") ? user.email : "")}
+                {profile?.phone_number || profile?.email || (user.email && !user.email.endsWith("@phone.noemail.invalid") ? user.email : "")}
               </div>
             </DropdownMenuLabel>
 
@@ -235,7 +235,7 @@ const Navbar = () => {
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-bold truncate">{profile?.full_name || "مستخدم"}</div>
-                        <div className="text-xs text-muted-foreground truncate" dir="ltr">{profile?.phone_number || profile?.email || (user.email && !user.email.endsWith("@internal.noemail.local") ? user.email : "")}</div>
+                        <div className="text-xs text-muted-foreground truncate" dir="ltr">{profile?.phone_number || profile?.email || (user.email && !user.email.endsWith("@phone.noemail.invalid") ? user.email : "")}</div>
                       </div>
                     </div>
                     <Link to={profile?.role === "admin" ? "/admin" : "/dashboard"} onClick={() => setOpen(false)}>

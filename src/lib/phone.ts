@@ -16,11 +16,11 @@ export function isValidEgPhone(raw: string): boolean {
 }
 
 export function syntheticAuthEmail(phone: string): string {
-  return `${normalizeEgPhone(phone)}@internal.noemail.local`;
+  return `${normalizeEgPhone(phone)}@phone.noemail.invalid`;
 }
 
 export function isSyntheticEmail(email: string | null | undefined): boolean {
-  return !!email && email.endsWith("@internal.noemail.local");
+  return !!email && email.endsWith("@phone.noemail.invalid");
 }
 
 // Returns true when the identifier looks like an Egyptian phone number

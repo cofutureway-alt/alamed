@@ -6,7 +6,7 @@ export function displayIdentity(profile: Profile | null, userEmail?: string | nu
   return (
     profile.phone_number ||
     profile.email ||
-    (profile.auth_email && !profile.auth_email.endsWith("@internal.noemail.local")
+    (profile.auth_email && !profile.auth_email.endsWith("@phone.noemail.invalid")
       ? profile.auth_email
       : "") ||
     userEmail ||

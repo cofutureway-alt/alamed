@@ -126,7 +126,7 @@ export default function Checkout() {
   useEffect(() => {
     if (profile) {
       if (!fullName && profile.full_name) setFullName(profile.full_name);
-      if (!phone && (profile as any).phone) setPhone((profile as any).phone);
+      if (!phone && profile.phone_number) setPhone(profile.phone_number);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
