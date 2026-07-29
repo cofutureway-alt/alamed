@@ -57,7 +57,7 @@ export default function AdminRenewalPaymentLedger() {
           <Button
             size="lg"
             className="shadow-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-2 rounded-2xl"
-            onClick={() => window.open("https://wa.me/201500997722", "_blank")}
+            onClick={() => window.open("https://wa.me/201050073084", "_blank")}
           >
             <PhoneCall className="w-4 h-4" />
             <span>التواصل مع الدعم</span>
@@ -119,7 +119,7 @@ export default function AdminRenewalPaymentLedger() {
 
             <div>
               <span className="text-xs font-bold text-muted-foreground block mb-1">
-                المبلغ المتبقي (منصة الباشمهندس)
+                المبلغ المتبقي (منصة الباشمؤرخه)
               </span>
               <div className="text-3xl font-extrabold text-amber-600 dark:text-amber-400 tracking-tight flex items-baseline gap-1.5">
                 <span>{remainingPlatformDues.toLocaleString("ar-EG")}</span>
@@ -267,7 +267,7 @@ export default function AdminRenewalPaymentLedger() {
 
               <div className="space-y-2 text-base text-foreground leading-relaxed">
                 <p className="font-bold text-amber-700 dark:text-amber-300 text-lg">
-                  يتبقى مبلغ 1,800 ج.م، وهو خاص بالمصاريف المستحقة الخاصة بمنصة الباشمهندس.
+                  يتبقى مبلغ 1,800 ج.م، وهو خاص بالمصاريف المستحقة الخاصة بمنصة الباشمؤرخه.
                 </p>
 
                 <p className="text-muted-foreground text-sm leading-relaxed">
@@ -279,7 +279,7 @@ export default function AdminRenewalPaymentLedger() {
                 <Button
                   size="lg"
                   className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-2 rounded-2xl shadow-lg"
-                  onClick={() => window.open("https://wa.me/201500997722", "_blank")}
+                  onClick={() => window.open("https://wa.me/201050073084", "_blank")}
                 >
                   <PhoneCall className="w-5 h-5" />
                   <span>تواصل مع فريق الدعم عبر الواتساب</span>
