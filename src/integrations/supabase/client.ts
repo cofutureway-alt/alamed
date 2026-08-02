@@ -2,8 +2,14 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL ||
+  "https://qxubricrtjuwzunwppsf.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4dWJyaWNydGp1d3p1bndwcHNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU2MTMyNzgsImV4cCI6MjEwMTE4OTI3OH0.shsd_NTRFSWTKhmU4u4XlCNEXa02wpXlTzYDRKDSTXs";
 
 
 function isNewSupabaseApiKey(value: string): boolean {
