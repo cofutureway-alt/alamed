@@ -51,22 +51,15 @@ const Login = () => {
     }
 
     setLoading(true);
-    let authEmail: string;
-    if (identifierMode === "phone") {
-      const canonical = normalizeEgPhone(idTrim);
-      // Ask the server which auth email is associated with this phone
-      const { data: resolved, error: resolveErr } = await (supabase as any).rpc(
-        "resolve_login_email",
-        { _identifier: canonical },
-      );
-      if (resolveErr) {
-        // Fallback: synthetic email if user has no real email set
-        authEmail = syntheticAuthEmail(canonical);
-      } else {
-        authEmail = (resolved as string) || syntheticAuthEmail(canonical);
-      }
-    } else {
-      authEmail = idTrim.toLowerCase();
+    let authEmail: string = idTrim.toLowerCase();
+
+    // Resolve the internal auth_email associated with phone or email
+    const { data: resolved } = await (supabase as any).rpc(
+      "resolve_login_email",
+      { _identifier: identifierMode === "phone" ? normalizeEgPhone(idTrim) : idTrim },
+    );
+    if (resolved && typeof resolved === "string" && resolved.trim()) {
+      authEmail = resolved.trim();
     }
 
     const { data, error } = await supabase.auth.signInWithPassword({
