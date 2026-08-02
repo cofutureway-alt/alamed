@@ -100,7 +100,7 @@ const FeaturesSection = () => {
             transition={{ delay: 0.08 }}
             className="text-base text-muted-foreground leading-relaxed"
           >
-            نوفر لك بيئة تعليمية تفاعلية وميسرة لمتابعة الدروس والعلوم الشرعية مع المعلم
+            نوفر لك بيئة تعليمية تفاعلية وميسرة لمتابعة الدروس ومادة البرمجة للبكالوريا مع المعلم
           </motion.p>
         </div>
 

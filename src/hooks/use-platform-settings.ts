@@ -20,13 +20,18 @@ export interface PlatformSettings {
 export const DEFAULT_PLATFORM_SETTINGS: PlatformSettings = {
   logo_light_url: null,
   logo_dark_url: null,
-  social_links: [],
+  social_links: [
+    { platform: "YouTube", url: "https://www.youtube.com/@alameedonline/videos" },
+    { platform: "Facebook", url: "https://www.facebook.com/share/162bhrjDzPg/?mibextid=wwXIfr" },
+    { platform: "Instagram", url: "https://www.instagram.com/alameedonline" },
+    { platform: "WhatsApp", url: "https://wsend.co/201027379022" },
+  ],
   hero_image_url: null,
-  hero_headline: "رحلتك في العلم\nتبدأ من هنا",
+  hero_headline: "منصة العميد لشرح مادة البرمجة\nللثانوية العامة",
   hero_subtext:
-    "دروس منظّمة، متابعة مستمرة، واختبارات تفاعلية تقيس تقدّمك خطوة بخطوة — كل ما تحتاجه للتفوّق في مكان واحد.",
-  hero_cta_label: "تصفح الكورسات",
-  hero_cta_url: "/courses",
+    "شرح مبسّط ومتدرّج لطلاب الصف الأول والثاني الثانوي، من أساسيات الخوارزميات حتى كتابة الكود وحل نماذج الامتحانات.",
+  hero_cta_label: "ابدأ التعلم",
+  hero_cta_url: "/#grades",
 };
 
 function normalize(row: any): PlatformSettings {
@@ -108,11 +113,8 @@ export function usePlatformSettings() {
 
   const reload = useCallback(async () => {
     invalidatePlatformSettingsCache();
-    setLoading(true);
-    const s = await fetchPlatformSettings();
-    setSettings(s);
-    setLoading(false);
+    await fetchPlatformSettings();
   }, []);
 
-  return { settings, loading, setSettings, reload };
+  return { settings, loading, reload };
 }

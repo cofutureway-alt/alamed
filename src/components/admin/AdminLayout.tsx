@@ -60,7 +60,6 @@ const isGroup = (e: NavEntry): e is GroupItem => (e as GroupItem).children !== u
 
 const nav: NavEntry[] = [
   { to: "/admin", label: "الإحصائيات", icon: BarChart3, end: true },
-  { to: "/admin/renewal-payments", label: "سجل سداد التجديد", icon: Coins },
   {
     id: "academics",
     label: "المحتوى التعليمي",
@@ -80,14 +79,14 @@ const nav: NavEntry[] = [
     label: "الطلاب والتقييم",
     icon: Users,
     children: [
-      { to: "/admin/users",               label: "جميع المستخدمين",    icon: UserCog },
-      { to: "/admin/students",            label: "إدارة الطلاب",        icon: Users },
-      { to: "/admin/testimonials",        label: "آراء الطلاب",         icon: MessageSquare },
-      { to: "/admin/parents",             label: "أولياء الأمور",       icon: Users },
-      { to: "/admin/parent-link-requests",label: "طلبات أولياء الأمور", icon: Users },
-      { to: "/admin/quiz-attempts",       label: "محاولات الاختبارات",  icon: ClipboardCheck },
-      { to: "/admin/assignment-submissions",label: "تسليمات الواجبات",   icon: ClipboardEdit },
-      { to: "/admin/cards",               label: "كروت الطلاب",         icon: CreditCard },
+      { to: "/admin/users", label: "جميع المستخدمين", icon: UserCog },
+      { to: "/admin/students", label: "إدارة الطلاب", icon: Users },
+      { to: "/admin/testimonials", label: "آراء الطلاب", icon: MessageSquare },
+      { to: "/admin/parents", label: "أولياء الأمور", icon: Users },
+      { to: "/admin/parent-link-requests", label: "طلبات أولياء الأمور", icon: Users },
+      { to: "/admin/quiz-attempts", label: "محاولات الاختبارات", icon: ClipboardCheck },
+      { to: "/admin/assignment-submissions", label: "تسليمات الواجبات", icon: ClipboardEdit },
+      { to: "/admin/cards", label: "كروت الطلاب", icon: CreditCard },
     ],
   },
   {
@@ -144,10 +143,9 @@ const NavLeaf = ({
     onClick={onNavigate}
     title={collapsed ? label : undefined}
     className={({ isActive }) =>
-      `group relative flex items-center gap-3 rounded-xl ${collapsed ? "justify-center px-2" : nested ? "pr-8 pl-3" : "px-4"} py-2.5 text-sm font-medium transition-all ${
-        isActive
-          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-          : "text-foreground/70 hover:bg-accent hover:text-foreground"
+      `group relative flex items-center gap-3 rounded-xl ${collapsed ? "justify-center px-2" : nested ? "pr-8 pl-3" : "px-4"} py-2.5 text-sm font-medium transition-all ${isActive
+        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+        : "text-foreground/70 hover:bg-accent hover:text-foreground"
       }`
     }
   >
@@ -198,11 +196,10 @@ const NavGroup = ({
         <button
           type="button"
           title={group.label}
-          className={`w-full flex items-center justify-center px-2 py-3 rounded-xl text-sm font-medium transition-all ${
-            hasActive
+          className={`w-full flex items-center justify-center px-2 py-3 rounded-xl text-sm font-medium transition-all ${hasActive
               ? "bg-primary/10 text-primary"
               : "text-foreground/70 hover:bg-accent hover:text-foreground"
-          }`}
+            }`}
         >
           <Icon className="w-5 h-5" />
         </button>
@@ -233,11 +230,10 @@ const NavGroup = ({
       <button
         type="button"
         onClick={() => setOpenId(isOpen ? null : group.id)}
-        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-          hasActive
+        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${hasActive
             ? "bg-primary/10 text-primary"
             : "text-foreground/70 hover:bg-accent hover:text-foreground"
-        }`}
+          }`}
       >
         <Icon className="w-4 h-4 shrink-0" />
         <span className="flex-1 text-right truncate">{group.label}</span>
@@ -293,7 +289,7 @@ const SidebarContent = ({
     <div className="flex h-full flex-col">
       <div className={`${collapsed ? "px-3" : "px-6"} py-6 border-b border-border/60`}>
         <NavLink to="/" className={`flex items-center ${collapsed ? "justify-center" : "gap-3"} group`}>
-          <img src="/logo.png" alt="شعار الساعي" className="h-11 w-11 rounded-lg object-contain" />
+          <img src="/logo.png" alt="شعار العميد" className="h-11 w-11 rounded-lg object-contain" />
           {!collapsed && (
             <div>
               <div className="font-bold text-foreground leading-tight">لوحة الإدارة</div>
@@ -348,7 +344,7 @@ const AdminLayout = ({ children }: { children?: ReactNode }) => {
   const toggleCollapsed = () => {
     setCollapsed((v) => {
       const nv = !v;
-      try { localStorage.setItem("admin-sidebar-collapsed", nv ? "1" : "0"); } catch {}
+      try { localStorage.setItem("admin-sidebar-collapsed", nv ? "1" : "0"); } catch { }
       return nv;
     });
   };
@@ -445,37 +441,37 @@ const AdminLayout = ({ children }: { children?: ReactNode }) => {
             <ThemeToggle />
             <NotificationBell />
             <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-3 rounded-full p-1 pl-3 hover:bg-accent transition-colors">
-                <span className="hidden md:inline text-sm font-medium">
-                  {profile?.full_name || user?.email}
-                </span>
-                <Avatar className="w-9 h-9 border border-border">
-                  <AvatarImage src={profile?.avatar_url ?? undefined} />
-                  <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <div className="font-semibold">{profile?.full_name || "مشرف"}</div>
-                <div className="text-xs text-muted-foreground font-normal truncate">
-                  {user?.email}
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate("/admin/account")}>
-                <UserIcon className="w-4 h-4 ml-2" />
-                الملف الشخصي
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
-                <LogOut className="w-4 h-4 ml-2" />
-                تسجيل الخروج
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-3 rounded-full p-1 pl-3 hover:bg-accent transition-colors">
+                  <span className="hidden md:inline text-sm font-medium">
+                    {profile?.full_name || user?.email}
+                  </span>
+                  <Avatar className="w-9 h-9 border border-border">
+                    <AvatarImage src={profile?.avatar_url ?? undefined} />
+                    <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="font-semibold">{profile?.full_name || "مشرف"}</div>
+                  <div className="text-xs text-muted-foreground font-normal truncate">
+                    {user?.email}
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/admin/account")}>
+                  <UserIcon className="w-4 h-4 ml-2" />
+                  الملف الشخصي
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                  <LogOut className="w-4 h-4 ml-2" />
+                  تسجيل الخروج
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
 

@@ -47,7 +47,7 @@ const AuthLayout = ({ title, subtitle, children, footer }: Props) => {
             className="flex justify-center mb-6"
           >
             <Link to="/">
-              <img src="/logo.png" alt="الساعي" className="h-16 w-16 rounded-xl object-contain" />
+              <img src="/logo.png" alt="العميد" className="h-16 w-16 rounded-xl object-contain" />
             </Link>
           </motion.div>
 

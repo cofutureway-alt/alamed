@@ -34,14 +34,9 @@ const Navbar = () => {
       ? settings.logo_dark_url
       : settings.logo_light_url || "/logo.png";
 
-
   const links = [
-    { label: "الرئيسية", href: "/" },
-    { label: "المميزات", href: "/#features" },
     { label: "الدورات", href: "/courses" },
-    { label: "الباقات", href: "/bundles" },
     { label: "الكتب", href: "/books" },
-    { label: "أماكن التواجد", href: "/branches" },
     { label: "المتصدرين", href: "/leaderboard" },
     { label: "تفعيل كود", href: "/redeem" },
   ];
@@ -168,27 +163,34 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <Link to="/" className="flex items-center">
-          <img src={logoUrl} alt="شعار الساعي" className="h-14 w-14 rounded-lg object-contain" />
+      <div className="container mx-auto flex items-center justify-between h-16 px-4 relative">
+        {/* Right Section: Logo */}
+        <Link to="/" className="flex items-center gap-3 shrink-0">
+          <img src={logoUrl} alt="شعار العميد" className="h-12 w-12 rounded-xl object-contain shadow-sm" />
         </Link>
 
-        <div className="hidden md:flex items-center gap-6">
+        {/* Center Section: Main Nav Links */}
+        <div className="hidden md:flex items-center justify-center gap-2 absolute left-1/2 -translate-x-1/2">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
               onClick={(e) => handleNav(e, l.href)}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors cursor-pointer px-3.5 py-1.5 rounded-xl hover:bg-primary/5"
             >
               {l.label}
             </a>
           ))}
-          <ThemeToggle />
+        </div>
+
+        {/* Left Section: Action Widgets & User Profile */}
+        <div className="hidden md:flex items-center gap-3">
           {user && profile?.role !== "admin" && <WalletWidget to="/dashboard/wallet" />}
           {user && profile?.role === "admin" && <WalletWidget to="/admin/wallets" />}
           {user && <CartWidget />}
           {user && <NotificationBell />}
+          <ThemeToggle />
+          <div className="h-5 w-[1px] bg-border/60 mx-1" />
           <AuthArea />
         </div>
 

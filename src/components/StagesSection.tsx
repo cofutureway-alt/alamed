@@ -31,43 +31,27 @@ const StagesSection = () => {
   if (stages !== null && stages.length === 0) return null;
 
   return (
-    <section id="stages" className="py-24 relative overflow-hidden">
-      <EightPointStar size={70} className="absolute top-10 left-10 text-primary/5 animate-spin-slow" />
-      <EightPointStar size={50} className="absolute bottom-10 right-10 text-primary/5 animate-float" />
-
+    <section id="stages" className="py-10 md:py-14 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
-        <IslamicDivider className="mb-8" />
-        <div
-          className={`flex items-center justify-center gap-2 mb-3 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-        >
+        <div className="flex items-center justify-center gap-2 mb-3">
           <GraduationCap className="w-5 h-5 text-primary animate-bounce-soft" />
           <span className="text-sm font-bold text-primary uppercase tracking-wider">اختر مرحلتك</span>
         </div>
-        <h2
-          className={`text-3xl md:text-4xl font-bold text-center mb-4 transition-all duration-700 delay-75 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
           المراحل الدراسية
         </h2>
-        <p
-          className={`text-muted-foreground text-center mb-14 max-w-lg mx-auto transition-all duration-700 delay-100 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          اختر مرحلتك الدراسية وابدأ رحلتك في العلوم الشرعية
+        <p className="text-muted-foreground text-center mb-8 max-w-lg mx-auto">
+          اختر مرحلتك الدراسية وابدأ رحلتك في تعلّم البرمجة
         </p>
 
         {stages === null ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-6">
+            {Array.from({ length: 2 }).map((_, i) => (
               <Skeleton key={i} className="h-72 rounded-2xl" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-6">
             {stages.map((s, i) => (
               <StageCard
                 key={s.id}

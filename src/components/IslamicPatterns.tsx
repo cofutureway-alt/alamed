@@ -1,101 +1,50 @@
 import React from "react";
+import { Code2, Terminal, Cpu, Braces, Binary, FileCode2 } from "lucide-react";
+
 /**
- * Reusable Islamic geometric pattern and ornament SVG components.
+ * Reusable programming and tech decorative SVG/icon components.
+ * Replaces old ornamental patterns with modern programming elements.
  */
 
-/** Islamic arch (mihrab) shape used as section dividers or decorative frames */
+/** Tech code frame ornament */
 export const IslamicArch = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 200 120" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M10 120 L10 50 Q10 10 100 10 Q190 10 190 50 L190 120"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <path
-      d="M30 120 L30 55 Q30 25 100 25 Q170 25 170 55 L170 120"
-      stroke="currentColor"
-      strokeWidth="0.8"
-      fill="none"
-    />
-  </svg>
+  <div className={`inline-flex items-center justify-center text-primary/30 ${className}`}>
+    <Code2 className="w-12 h-12 stroke-[1.5]" />
+  </div>
 );
 
-/** Eight-pointed star (Rub el Hizb) - common Islamic geometric motif */
+/** Tech programming icon ornament - Code / Braces symbol */
 export const EightPointStar = ({ className = "", size = 40, style }: { className?: string; size?: number; style?: React.CSSProperties }) => (
-  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" className={className} style={style} xmlns="http://www.w3.org/2000/svg">
-    <polygon
-      points="50,5 61,34 95,34 68,55 79,85 50,67 21,85 32,55 5,34 39,34"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <polygon
-      points="50,15 58,38 82,38 63,53 71,77 50,63 29,77 37,53 18,38 42,38"
-      stroke="currentColor"
-      strokeWidth="0.8"
-      fill="none"
-    />
-  </svg>
+  <div className={`inline-flex items-center justify-center text-primary/30 ${className}`} style={{ width: size, height: size, ...style }}>
+    <Code2 size={size} className="stroke-[1.5]" />
+  </div>
 );
 
-/** Islamic geometric repeating tile pattern for backgrounds */
+/** Tech repeating grid background pattern */
 export const IslamicPattern = ({ className = "" }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
-    <g stroke="currentColor" strokeWidth="0.5" opacity="0.15">
-      {/* Central octagon */}
-      <polygon points="40,10 55,17 60,33 55,48 40,55 25,48 20,33 25,17" />
-      {/* Corner connections */}
-      <line x1="0" y1="0" x2="25" y2="17" />
-      <line x1="80" y1="0" x2="55" y2="17" />
-      <line x1="0" y1="80" x2="25" y2="48" />
-      <line x1="80" y1="80" x2="55" y2="48" />
-      {/* Side connections */}
-      <line x1="40" y1="0" x2="40" y2="10" />
-      <line x1="40" y1="55" x2="40" y2="80" />
-      <line x1="0" y1="33" x2="20" y2="33" />
-      <line x1="60" y1="33" x2="80" y2="33" />
-      {/* Inner star */}
-      <line x1="40" y1="10" x2="55" y2="48" />
-      <line x1="55" y1="17" x2="25" y2="48" />
-      <line x1="60" y1="33" x2="25" y2="17" />
-      <line x1="55" y1="48" x2="20" y2="33" />
-      <line x1="40" y1="55" x2="25" y2="17" />
-      <line x1="25" y1="48" x2="55" y2="17" />
-      <line x1="20" y1="33" x2="55" y2="48" />
-      <line x1="25" y1="17" x2="60" y2="33" />
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
+    <g stroke="currentColor" strokeWidth="0.5" opacity="0.1">
+      <rect x="5" y="5" width="50" height="50" rx="6" />
+      <path d="M15 25L25 35L15 45" />
+      <line x1="30" y1="45" x2="45" y2="45" />
     </g>
   </svg>
 );
 
-/** Crescent and star motif */
+/** Tech CPU / Chip motif */
 export const CrescentStar = ({ className = "", size = 32, style }: { className?: string; size?: number; style?: React.CSSProperties }) => (
-  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" className={className} style={style} xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M60 15 A35 35 0 1 0 60 85 A28 28 0 1 1 60 15Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <polygon
-      points="78,35 81,43 89,43 83,48 85,56 78,51 71,56 73,48 67,43 75,43"
-      stroke="currentColor"
-      strokeWidth="1"
-      fill="currentColor"
-      opacity="0.3"
-    />
-  </svg>
+  <div className={`inline-flex items-center justify-center text-primary/40 ${className}`} style={{ width: size, height: size, ...style }}>
+    <Cpu size={size} className="stroke-[1.5]" />
+  </div>
 );
 
-/** Islamic section divider with ornamental elements */
+/** Modern programming section divider with code brackets */
 export const IslamicDivider = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center justify-center gap-3 ${className}`}>
     <div className="h-px flex-1 max-w-24 bg-border" />
-    <EightPointStar size={20} className="text-primary/40 animate-spin-slow" />
-    <div className="w-2 h-2 rotate-45 border border-primary/30" />
-    <EightPointStar size={16} className="text-primary/30" />
-    <div className="w-2 h-2 rotate-45 border border-primary/30" />
-    <EightPointStar size={20} className="text-primary/40 animate-spin-slow" style={{ animationDirection: "reverse" }} />
+    <span className="font-mono text-xs font-bold text-primary/40 px-2 py-0.5 rounded border border-border bg-card">
+      &lt;/&gt;
+    </span>
     <div className="h-px flex-1 max-w-24 bg-border" />
   </div>
 );

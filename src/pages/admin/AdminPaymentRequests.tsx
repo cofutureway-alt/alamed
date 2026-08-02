@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Clock, CheckCircle2, XCircle, Loader2, Inbox, Wallet as WalletIcon,
-  BookOpen, Filter, ExternalLink, ImageIcon, Receipt,
+  BookOpen, Filter, ExternalLink, ImageIcon, Receipt, Ticket,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,7 @@ function dateAr(iso: string) {
 }
 
 export default function AdminPaymentRequests() {
-  const [purposeFilter, setPurposeFilter] = useState<"all" | "course_purchase" | "wallet_topup">("all");
+  const [purposeFilter, setPurposeFilter] = useState<"all" | "course_purchase" | "wallet_topup" | "code_redemption">("all");
   const [statusFilter, setStatusFilter] = useState<"pending_review" | "success" | "failed" | "all">("pending_review");
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
@@ -118,6 +118,7 @@ export default function AdminPaymentRequests() {
               { v: "all", l: "الكل" },
               { v: "course_purchase", l: "شراء دورة" },
               { v: "wallet_topup", l: "شحن محفظة" },
+              { v: "code_redemption", l: "كود الشراء" },
             ].map((o) => (
               <button
                 key={o.v}
@@ -190,8 +191,8 @@ export default function AdminPaymentRequests() {
                       </td>
                       <td className="p-3">
                         <div className="inline-flex items-center gap-1.5 text-xs font-semibold">
-                          {r.purpose === "wallet_topup" ? <WalletIcon className="w-3.5 h-3.5" /> : <BookOpen className="w-3.5 h-3.5" />}
-                          {r.purpose === "wallet_topup" ? "شحن محفظة" : "شراء دورة"}
+                          {r.purpose === "wallet_topup" ? <WalletIcon className="w-3.5 h-3.5" /> : r.purpose === "code_redemption" ? <Ticket className="w-3.5 h-3.5" /> : <BookOpen className="w-3.5 h-3.5" />}
+                          {r.purpose === "wallet_topup" ? "شحن محفظة" : r.purpose === "code_redemption" ? "كود الشراء" : "شراء دورة"}
                         </div>
                         {r.course_title && <div className="text-xs text-muted-foreground mt-0.5 truncate max-w-[200px]">{r.course_title}</div>}
                       </td>

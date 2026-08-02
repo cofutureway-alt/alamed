@@ -16,39 +16,19 @@ const FeaturedCoursesSection = () => {
   if (courses.length === 0) return null;
 
   return (
-    <section id="featured-courses" className="py-24 relative overflow-hidden bg-accent/10">
-      <EightPointStar size={70} className="absolute top-12 right-12 text-primary/5 animate-spin-slow" />
-      <EightPointStar size={50} className="absolute bottom-12 left-12 text-primary/5 animate-float" />
-
+    <section id="featured-courses" className="py-10 md:py-14 relative overflow-hidden bg-accent/10">
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
-        <IslamicDivider className="mb-8" />
 
         {/* Header row */}
-        <div
-          className={`flex flex-col items-center gap-3 mb-4 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-            <Star className="w-4 h-4 text-primary animate-pulse-soft" fill="currentColor" />
-            <span className="text-xs font-bold text-primary">مختارة بعناية لك</span>
-            <Sparkles className="w-4 h-4 text-primary animate-float" />
-          </div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Sparkles className="w-5 h-5 text-primary animate-bounce-soft" />
+          <span className="text-sm font-bold text-primary uppercase tracking-wider">الدورات المتاحة</span>
         </div>
-
-        <h2
-          className={`text-3xl md:text-5xl font-extrabold text-center mb-3 transition-all duration-700 delay-75 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          الدورات المميزة
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
+          الدورات التعليمية المميزة
         </h2>
-        <p
-          className={`text-muted-foreground text-center mb-14 max-w-xl mx-auto transition-all duration-700 delay-100 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          نخبة من أفضل الدورات على المنصة، اخترناها لتناسب رحلتك التعليمية وتساعدك على التميّز
+        <p className="text-muted-foreground text-center mb-8 max-w-lg mx-auto">
+          اختر من بين أحدث الدورات والكورسات التعليمية المتاحة لشرح المنهج والدخول في التطبيق العملي
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

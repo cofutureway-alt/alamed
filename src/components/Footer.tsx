@@ -81,9 +81,10 @@ const Footer = () => {
     settings.social_links.length > 0
       ? settings.social_links
       : [
-          { platform: "YouTube", url: "https://www.youtube.com/@elsa3i" },
-          { platform: "Facebook", url: "https://www.facebook.com/Elsa3i.shr3i" },
-          { platform: "Telegram", url: "https://t.me/elsa3i" },
+          { platform: "YouTube", url: "https://www.youtube.com/@alameedonline/videos" },
+          { platform: "Facebook", url: "https://www.facebook.com/share/162bhrjDzPg/?mibextid=wwXIfr" },
+          { platform: "Instagram", url: "https://www.instagram.com/alameedonline" },
+          { platform: "WhatsApp", url: "https://wsend.co/201027379022" },
         ];
 
   return (
@@ -97,18 +98,17 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-3">
             <div className="flex items-center">
-              <img src={logoUrl} alt="الساعي" className="h-14 w-14 rounded-lg object-contain" />
+              <img src={logoUrl} alt="العميد" className="h-14 w-14 rounded-lg object-contain" />
             </div>
-            <p className="text-sm text-muted-foreground">منصة تعليمية متكاملة لشرح العلوم الشرعية</p>
+            <p className="text-sm text-muted-foreground">منصة خدمات العميد لشرح مادة البرمجة للبكالوريا</p>
           </div>
           <div className="space-y-3">
             <h4 className="font-bold text-sm">روابط سريعة</h4>
             <div className="flex flex-col gap-2">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">الرئيسية</Link>
               <Link to="/courses" className="text-sm text-muted-foreground hover:text-foreground transition-colors">الدورات التعليمية</Link>
+              <Link to="/bundles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">الباقات</Link>
               <Link to="/books" className="text-sm text-muted-foreground hover:text-foreground transition-colors">الكتب والمراجع</Link>
-              <Link to="/branches" className="text-sm text-muted-foreground hover:text-foreground transition-colors">أماكن التواجد (أماكن الشرح)</Link>
-              <Link to="/leaderboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">لوحة المتصدرين</Link>
               <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">لوحة الطالب</Link>
             </div>
           </div>
@@ -132,7 +132,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>جميع الحقوق محفوظة لمنصة الساعي {new Date().getFullYear()} ©</p>
+          <p>جميع الحقوق محفوظة لمنصة العميد {new Date().getFullYear()} ©</p>
           <a
             href="https://fakarli.com/"
             target="_blank"

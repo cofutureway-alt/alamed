@@ -15,7 +15,7 @@ export default function Branches() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "أماكن التواجد (الأماكن التي يشرح بها المعلم) — الساعي";
+    document.title = "أماكن التواجد (الأماكن التي يشرح بها المعلم) — العميد";
     let isMounted = true;
     (async () => {
       try {

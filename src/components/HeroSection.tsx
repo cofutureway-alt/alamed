@@ -79,7 +79,7 @@ const HeroSection = () => {
           >
             <motion.div variants={item} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
               <GraduationCap size={16} className="text-primary" />
-              <span className="text-xs font-bold text-primary">منصة الساعي التعليمية</span>
+              <span className="text-xs font-bold text-primary">منصة العميد التعليمية</span>
             </motion.div>
 
             <motion.h1
@@ -134,7 +134,7 @@ const HeroSection = () => {
               <div className="relative w-full h-full rounded-[1.75rem] overflow-hidden shadow-2xl ring-1 ring-border">
                 <img
                   src={heroImageUrl}
-                  alt="منصة الساعي - المعلّم"
+                  alt="منصة العميد - المعلّم"
                   className="w-full h-full object-contain bg-background"
                   loading="eager"
                   {...({ fetchpriority: "high" } as any)}

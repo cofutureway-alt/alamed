@@ -116,6 +116,20 @@ export function useCart() {
         toast.error("سجّل الدخول لإضافة الكتاب إلى السلة");
         return false;
       }
+
+      if (bookType === "physical") {
+        const { data: bData } = await (supabase as any)
+          .from("books")
+          .select("stock_quantity")
+          .eq("id", bookId)
+          .maybeSingle();
+
+        if (bData && (bData.stock_quantity ?? 0) <= 0) {
+          toast.error("عذراً، هذا الكتاب غير متوفر في المخزون حالياً");
+          return false;
+        }
+      }
+
       const existing = items.find((i) => i.book_id === bookId);
       if (existing) {
         if (bookType === "digital") {

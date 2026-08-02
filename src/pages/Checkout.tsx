@@ -96,7 +96,7 @@ export default function Checkout() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    document.title = "إتمام الشراء — الساعي";
+    document.title = "إتمام الشراء — العميد";
   }, []);
 
   const lines = useMemo(
@@ -126,9 +126,8 @@ export default function Checkout() {
   useEffect(() => {
     if (profile) {
       if (!fullName && profile.full_name) setFullName(profile.full_name);
-      if (!phone && profile.phone_number) setPhone(profile.phone_number);
+      if (profile.phone_number) setPhone(profile.phone_number);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
   // Load zones, shipping default, gateways, manual methods, wallet
@@ -200,6 +199,20 @@ export default function Checkout() {
 
   function validate(): string | null {
     if (lines.length === 0) return "سلة الشراء فارغة";
+
+    // Validate inventory stock for physical books
+    for (const line of lines) {
+      if (line.book.book_type === "physical") {
+        const stock = line.book.stock_quantity ?? 0;
+        if (stock <= 0) {
+          return `عذراً، الكتاب "${line.book.title}" غير متوفر بالمخزون حالياً`;
+        }
+        if (line.quantity > stock) {
+          return `الكمية المطلوبة لكتاب "${line.book.title}" (${line.quantity}) تتجاوز المتاح في المخزون (${stock})`;
+        }
+      }
+    }
+
     if (hasPhysical) {
       if (!zoneId) return "اختر منطقة الشحن";
       if (!fullName.trim()) return "أدخل الاسم بالكامل";
@@ -344,8 +357,10 @@ export default function Checkout() {
                     <Input
                       inputMode="tel"
                       dir="ltr"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      value={phone || profile?.phone_number || ""}
+                      disabled
+                      readOnly
+                      className="bg-muted/50 cursor-not-allowed font-mono opacity-90"
                       placeholder="01xxxxxxxxx"
                     />
                   </div>

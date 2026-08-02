@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Search, Cloud, Package, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -52,7 +53,9 @@ function BookCard({ book, delay }: { book: PublicBook; delay: number }) {
       className="group"
     >
       <Card className="overflow-hidden h-full flex flex-col hover:shadow-xl transition-shadow border-border/60">
-        <Cover path={book.cover_image_url} title={book.title} />
+        <Link to={`/books/${book.id}`} className="block">
+          <Cover path={book.cover_image_url} title={book.title} />
+        </Link>
         <div className="p-4 flex-1 flex flex-col gap-3">
           <div className="flex flex-wrap gap-1.5">
             {book.book_type === "digital" ? (
@@ -64,17 +67,17 @@ function BookCard({ book, delay }: { book: PublicBook; delay: number }) {
               <Badge variant="outline" className="text-emerald-600 border-emerald-500/40">خصم</Badge>
             )}
           </div>
-          <div className="flex-1">
+          <Link to={`/books/${book.id}`} className="flex-1 group-hover:text-primary transition-colors">
             <h3 className="font-bold line-clamp-2 leading-snug">{book.title}</h3>
             {book.author && <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{book.author}</p>}
-          </div>
+          </Link>
           <div className="flex items-baseline gap-2">
             <span className="text-lg font-bold text-primary">{formatPiastres(eff.amount)}</span>
             {eff.discountActive && (
               <span className="text-xs text-muted-foreground line-through">{formatPiastres(eff.originalAmount ?? 0)}</span>
             )}
           </div>
-          <AddToCartButton bookId={book.id} bookType={book.book_type} fullWidth />
+          <AddToCartButton bookId={book.id} bookType={book.book_type} stockQuantity={book.stock_quantity} fullWidth />
         </div>
       </Card>
     </motion.div>
@@ -92,7 +95,7 @@ export default function Books() {
   const [stageId, setStageId] = useState<string>("all");
 
   useEffect(() => {
-    document.title = "الكتب — الساعي";
+    document.title = "الكتب — العميد";
   }, []);
 
   useEffect(() => {

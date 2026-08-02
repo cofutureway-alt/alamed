@@ -26,7 +26,7 @@ export default function LeaderboardPage() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 text-xs font-bold mb-4">
               <Sparkles className="w-3.5 h-3.5" />
-              أوائل الساعي
+              أوائل العميد
             </div>
             <h1 className="text-4xl md:text-6xl font-black">المتصدرون</h1>
             <p className="text-muted-foreground mt-3 max-w-xl mx-auto">

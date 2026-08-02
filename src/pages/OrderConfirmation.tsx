@@ -34,7 +34,7 @@ export default function OrderConfirmation() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "تأكيد الطلب — الساعي";
+    document.title = "تأكيد الطلب — العميد";
     (async () => {
       if (!id) return;
       try {
