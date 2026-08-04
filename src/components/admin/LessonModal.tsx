@@ -273,6 +273,19 @@ const LessonModal = ({ open, onOpenChange, unitId, lesson, nextPosition, onSaved
     }
   };
 
+  /** Strips non-ASCII characters and spaces so Supabase storage keys stay valid.
+   *  The original filename is preserved separately for display in the DB. */
+  const sanitizeFileName = (name: string): string => {
+    const ext = name.includes(".") ? "." + name.split(".").pop() : "";
+    const base = name.replace(/\.[^.]+$/, ""); // remove extension
+    const safe = base
+      .replace(/[^\x00-\x7F]/g, "") // strip non-ASCII (Arabic etc.)
+      .replace(/\s+/g, "_")          // spaces → underscores
+      .replace(/[^a-zA-Z0-9._-]/g, "") // strip remaining special chars
+      .trim();
+    return (safe || `file_${Date.now()}`) + ext;
+  };
+
   const handleUpload = async (fs: FileList | null) => {
     if (!fs || !activeLessonId) return;
     const rejected: string[] = [];
@@ -297,7 +310,8 @@ const LessonModal = ({ open, onOpenChange, unitId, lesson, nextPosition, onSaved
     setUploading(true);
     try {
       for (const f of accepted) {
-        const path = `${activeLessonId}/${crypto.randomUUID()}-${f.name}`;
+        const safeFileName = sanitizeFileName(f.name);
+        const path = `${activeLessonId}/${crypto.randomUUID()}-${safeFileName}`;
         const { error: upErr } = await supabase.storage
           .from("lesson-files")
           .upload(path, f, { contentType: f.type });
