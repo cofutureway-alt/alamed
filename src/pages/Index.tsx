@@ -17,15 +17,18 @@ import {
   CheckCircle2,
   Globe,
   Award,
+  Sparkles,
+  ArrowRight,
+  BookOpen,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const SOCIAL_ICONS: Record<string, JSX.Element> = {
-  facebook: <Facebook className="h-4 w-4 text-primary" />,
-  instagram: <Instagram className="h-4 w-4 text-primary" />,
-  youtube: <Youtube className="h-4 w-4 text-primary" />,
-  twitter: <MessageCircle className="h-4 w-4 text-primary" />,
-  whatsapp: <Phone className="h-4 w-4 text-primary" />,
+  facebook: <Facebook className="h-4 w-4" />,
+  instagram: <Instagram className="h-4 w-4" />,
+  youtube: <Youtube className="h-4 w-4" />,
+  twitter: <MessageCircle className="h-4 w-4" />,
+  whatsapp: <Phone className="h-4 w-4" />,
 };
 
 const DEFAULT_SOCIALS = [
@@ -36,24 +39,24 @@ const DEFAULT_SOCIALS = [
 ];
 
 const features = [
-  { Icon: FileCode2, title: "شرح عملي", desc: "كل درس مدعوم بأمثلة كود وتطبيقات مباشرة." },
-  { Icon: Cpu, title: "منهج منظّم", desc: "ترتيب الدروس حسب المنهج الرسمي لنظام البكالوريا." },
-  { Icon: GraduationCap, title: "متابعة الطالب", desc: "واجبات وتقييمات دورية لقياس المستوى." },
-  { Icon: CheckCircle2, title: "استعداد للامتحان", desc: "مراجعات نهائية ونماذج محلولة." },
+  { Icon: FileCode2, title: "شرح عملي مباشر", desc: "كل درس مدعوم بأمثلة كود وتطبيقات برمجية مباشرة ينفذها الطالب بنفسه." },
+  { Icon: Cpu, title: "منهج منظم 100%", desc: "ترتيب الدروس الدقيق وفق المنهج الرسمي الجديد لنظام البكالوريا." },
+  { Icon: GraduationCap, title: "متابعة وتقييم دوري", desc: "واجبات واختبارات وتحديد لمستوى الطالب خطوة بخطوة." },
+  { Icon: CheckCircle2, title: "جاهزية تامة للامتحان", desc: "مراجعات نهائية مكثفة، وحل أسئلة وتجميعات الامتحانات السابقة." },
 ];
 
 const teacherFacts = [
-  "خبرة تزيد عن 15 عامًا في مجال التدريب والتدريس",
+  "خبرة تزيد عن 15 عامًا في مجال التدريب والتدريس الأكاديمي والمهني",
   "حاصل على الماجستير في تكنولوجيا المعلومات من جامعة ريفورد بأمريكا",
-  "حاصل على رخصة مدرب دولي معتمد في الذكاء الاصطناعي",
-  "حاصل على أقوى شهادات التسويق من جوجل",
-  "صاحب ومدير شركة العميد للخدمات الإلكترونية",
+  "حاصل على رخصة مدرب دولي معتمد في تطبيقات الذكاء الاصطناعي",
+  "حاصل على أعلى الشهادات الدولية في التسويق والتكنولوجيا من Google",
+  "صاحب ومدير شركة العميد للخدمات الإلكترونية والحلول البرمجية",
 ];
 
 const certificates = [
-  { src: "/cert1.jpg", title: "شهادة رخصة المدرب الدولي المعتمد" },
-  { src: "/cert2.jpg", title: "بطاقة الاتحاد العربي لتدريب التنمية البشرية" },
-  { src: "/cert3.jpg", title: "بطاقة مدرب معتمد من مؤسسة ذا واي" },
+  { src: "/cert1.jpg", title: "شهادة رخصة المدرب الدولي المعتمد", desc: "اعتماد دولي في تدريب تكنولوجيا المعلومات والذكاء الاصطناعي" },
+  { src: "/cert2.jpg", title: "بطاقة الاتحاد العربي لتدريب التنمية البشرية", desc: "عضوية وتوثيق الاتحاد العربي للتدريب" },
+  { src: "/cert3.jpg", title: "بطاقة مدرب معتمد من مؤسسة ذا واي", desc: "رخصة تدريب واستشارات تعليمية معتمدة" },
 ];
 
 const Index = () => {
@@ -75,64 +78,77 @@ const Index = () => {
   const headlineLines = headline.split("\n");
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
+    <div className="min-h-screen bg-background text-foreground flex flex-col justify-between antialiased selection:bg-primary/20">
+      {/* Real Full Platform Navbar */}
       <Navbar />
 
       <main className="pt-16">
-        {/* Hero Section */}
-        <section className="border-b border-border bg-gradient-to-b from-background via-card/50 to-background py-10 md:py-14">
-          <div className="container mx-auto grid max-w-6xl items-center gap-10 px-4 md:grid-cols-2">
+        {/* Dynamic Hero Section with Ambient Glowing Mesh */}
+        <section className="relative overflow-hidden border-b border-border/80 bg-grid-pattern py-14 md:py-20">
+          <div className="glow-blob -top-20 -right-20 h-96 w-96 bg-primary/20" />
+          <div className="glow-blob top-40 -left-20 h-80 w-80 bg-amber-500/20" />
+
+          <div className="relative container mx-auto grid max-w-6xl items-center gap-10 px-4 md:grid-cols-2">
             <div>
-              <span className="inline-block rounded-md border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
-                نظام البكالوريا - مسار البرمجة
-              </span>
-              <h1 className="mt-5 text-3xl font-extrabold leading-snug md:text-5xl whitespace-pre-line">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary shadow-sm backdrop-blur-md">
+                <Sparkles className="h-3.5 w-3.5 animate-pulse" />
+                <span>نظام البكالوريا الجديد - مسار البرمجة</span>
+              </div>
+
+              <h1 className="mt-5 text-3xl font-black leading-tight tracking-tight md:text-5xl whitespace-pre-line">
                 {headlineLines.map((line, idx) => (
-                  <span key={idx} className={idx > 0 ? "block text-primary mt-1" : ""}>
+                  <span key={idx} className={idx > 0 ? "block text-gradient mt-1" : ""}>
                     {line}
                   </span>
                 ))}
               </h1>
+
               <p className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg">
                 {subtext}
               </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
+
+              <div className="mt-7 flex flex-wrap items-center gap-4">
                 {ctaUrl.startsWith("http") ? (
                   <a
                     href={ctaUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 shadow-md"
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-7 py-3.5 text-sm font-bold text-white shadow-xl shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary/35"
                   >
-                    {ctaLabel}
+                    <BookOpen className="h-4 w-4" />
+                    <span>{ctaLabel}</span>
                   </a>
                 ) : (
                   <Link
                     to={ctaUrl}
-                    className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 shadow-md"
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-7 py-3.5 text-sm font-bold text-white shadow-xl shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary/35"
                   >
-                    {ctaLabel}
+                    <BookOpen className="h-4 w-4" />
+                    <span>{ctaLabel}</span>
                   </Link>
                 )}
+
               </div>
-              <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-border pt-6 text-center">
-                <div>
-                  <dt className="text-2xl font-extrabold text-primary">2</dt>
-                  <dd className="text-xs font-medium text-muted-foreground">صفوف دراسية</dd>
+
+              <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-border/80 pt-6 text-center">
+                <div className="rounded-xl border border-border/60 bg-card/50 p-3 backdrop-blur-sm">
+                  <dt className="text-2xl font-black text-gradient">2 صفوف</dt>
+                  <dd className="mt-1 text-xs font-semibold text-muted-foreground">الأول والثاني الثانوي</dd>
                 </div>
-                <div>
-                  <dt className="text-2xl font-extrabold text-primary">100%</dt>
-                  <dd className="text-xs font-medium text-muted-foreground">مطابق للمنهج</dd>
+                <div className="rounded-xl border border-border/60 bg-card/50 p-3 backdrop-blur-sm">
+                  <dt className="text-2xl font-black text-gradient">100%</dt>
+                  <dd className="mt-1 text-xs font-semibold text-muted-foreground">مطابق للبكالوريا</dd>
                 </div>
-                <div>
-                  <dt className="text-2xl font-extrabold text-primary">أونلاين</dt>
-                  <dd className="text-xs font-medium text-muted-foreground">في أي وقت</dd>
+                <div className="rounded-xl border border-border/60 bg-card/50 p-3 backdrop-blur-sm">
+                  <dt className="text-2xl font-black text-gradient">أونلاين</dt>
+                  <dd className="mt-1 text-xs font-semibold text-muted-foreground">مباشر ومسجل</dd>
                 </div>
               </dl>
             </div>
+
             <div className="w-full">
               {heroImage ? (
-                <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl">
+                <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl">
                   <img
                     src={heroImage}
                     alt="صورة الهيرو"
@@ -140,30 +156,45 @@ const Index = () => {
                   />
                 </div>
               ) : (
-                <CodeAnimation />
+                <div className="relative">
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary/30 to-amber-500/30 opacity-75 blur-xl" />
+                  <CodeAnimation />
+                </div>
               )}
             </div>
           </div>
         </section>
 
-        {/* Real Dynamic Stages Section from API */}
+        {/* Real Dynamic Stages Section from Backend */}
         <StagesSection />
 
-        {/* Real Dynamic Featured Courses from API */}
+        {/* Real Dynamic Featured Courses from Backend */}
         <FeaturedCoursesSection />
 
-        {/* Features Section */}
-        <section id="features" className="border-y border-border bg-card/60">
-          <div className="container mx-auto max-w-6xl px-4 py-10 md:py-14">
-            <h2 className="text-2xl font-extrabold md:text-3xl text-center md:text-right">لماذا منصة العميد</h2>
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/* High-Contrast Dark Tech Section - Breaks White Rhythm */}
+        <section id="features" className="relative overflow-hidden border-y border-slate-800 bg-[#090E17] py-16 text-white bg-grid-pattern">
+          <div className="glow-blob top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[450px] w-[450px] bg-primary/15" />
+
+          <div className="relative container mx-auto max-w-6xl px-4">
+            <div className="text-center">
+              <span className="inline-block rounded-full bg-primary/20 px-3.5 py-1 text-xs font-bold text-primary">
+                مميزات المنصة
+              </span>
+              <h2 className="mt-3 text-3xl font-black tracking-tight text-white md:text-4xl">لماذا تختار منصة العميد؟</h2>
+              <p className="mt-2 text-slate-400">أسلوب تعليمي متطور يجمع بين البساطة والتطبيق البرمجي الفعلي.</p>
+            </div>
+
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {features.map(({ Icon, title, desc }) => (
-                <div key={title} className="border border-border bg-background p-6 rounded-xl shadow-sm">
-                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
+                <div
+                  key={title}
+                  className="group relative rounded-xl border border-slate-800 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/50 hover:bg-slate-900"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/30 shadow-md shadow-primary/20 transition-transform group-hover:scale-110">
+                    <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 font-bold text-base">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
+                  <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">{desc}</p>
                 </div>
               ))}
             </div>
@@ -171,72 +202,105 @@ const Index = () => {
         </section>
 
         {/* Code Playground Section */}
-        <section id="playground" className="container mx-auto max-w-6xl px-4 py-10 md:py-14">
-          <div className="mb-8 text-center md:text-right">
-            <h2 className="text-2xl font-extrabold md:text-3xl">جرّب الكود بنفسك</h2>
+        <section id="playground" className="container mx-auto max-w-6xl px-4 py-14 md:py-20">
+          <div className="mb-10 text-center">
+            <span className="inline-block rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
+              بيئة التطوير الحية
+            </span>
+            <h2 className="mt-3 text-3xl font-black tracking-tight md:text-4xl">جرّب الكود بنفسك الآن</h2>
             <p className="mt-2 text-muted-foreground">
-              محرر بسيط داخل المنصة: عدّل الكود، اضغط تشغيل، وشاهد النتيجة أو رسالة الخطأ.
+              محرر أكواد تفاعلي مدعوم داخل المنصة: عدّل البيانات، شغّل الكود، وشاهد النتيجة الفورية.
             </p>
           </div>
-          <CodePlayground />
+
+          <div className="rounded-2xl border border-border bg-card/60 p-4 shadow-xl backdrop-blur-md md:p-6">
+            <CodePlayground />
+          </div>
         </section>
 
         {/* Teacher Section & Real Certificates */}
-        <section id="teacher" className="border-t border-border bg-card/40 py-10 md:py-14">
+        <section id="teacher" className="border-t border-border/80 bg-secondary/30 py-14 md:py-20">
           <div className="container mx-auto max-w-6xl px-4">
-            <div className="grid items-center gap-8 md:grid-cols-3">
-              <div className="border border-border bg-card p-3 rounded-2xl shadow-sm overflow-hidden flex justify-center">
-                <img
-                  src="/teacher.jpg"
-                  alt="صورة معلم مادة البرمجة - منصة العميد"
-                  className="w-full max-w-xs object-cover rounded-xl shadow-md"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/placeholder.svg";
-                  }}
-                />
+            <div className="grid items-center gap-12 md:grid-cols-3">
+              <div className="relative group">
+                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary to-amber-500 opacity-50 blur-lg transition-all group-hover:opacity-75" />
+                <div className="relative overflow-hidden rounded-2xl border-2 border-primary/20 bg-card p-3 shadow-xl">
+                  <img
+                    src="/teacher.jpg"
+                    alt="صورة معلم مادة البرمجة - منصة العميد"
+                    className="w-full rounded-xl object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/placeholder.svg";
+                    }}
+                  />
+                </div>
               </div>
+
               <div className="md:col-span-2">
-                <h2 className="text-2xl font-extrabold md:text-3xl">عن المعلم</h2>
-                <ul className="mt-5 space-y-3">
+                <span className="inline-block rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
+                  الخبرة والكفاءة
+                </span>
+                <h2 className="mt-3 text-3xl font-black tracking-tight md:text-4xl">عن المعلم المحاضر</h2>
+
+                <ul className="mt-6 space-y-3.5">
                   {teacherFacts.map((fact) => (
-                    <li key={fact} className="flex items-start gap-2 text-sm leading-relaxed">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      <span className="text-muted-foreground">{fact}</span>
+                    <li key={fact} className="flex items-start gap-3 text-sm leading-relaxed">
+                      <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="font-semibold text-foreground/90">{fact}</span>
                     </li>
                   ))}
                 </ul>
-                <div className="mt-7 flex flex-wrap items-center gap-3">
+
+                <div className="mt-8">
                   <a
                     href="https://wsend.co/201027379022"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 shadow-sm"
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-amber-500 px-7 py-3.5 text-sm font-bold text-white shadow-xl shadow-primary/25 transition-all hover:opacity-95 hover:shadow-2xl hover:shadow-primary/35"
                   >
-                    تواصل عبر واتساب
+                    <MessageCircle className="h-4 w-4" />
+                    <span>تواصل مباشر مع المحاضر عبر واتساب</span>
                   </a>
                 </div>
               </div>
             </div>
 
             {/* Official Certificates Grid */}
-            <div className="mt-16 pt-10 border-t border-border">
-              <div className="flex items-center gap-2 mb-6">
-                <Award className="h-6 w-6 text-primary" />
-                <h3 className="text-xl font-extrabold">شهادات التقدير والرخص المعتمدة</h3>
+            <div id="certificates" className="mt-20 pt-10 border-t border-border/80">
+              <div className="text-center">
+                <span className="inline-block rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
+                  التراخيص المعتمدة
+                </span>
+                <h2 className="mt-3 text-3xl font-black tracking-tight md:text-4xl">شهادات التقدير والاعتمادات الدولية</h2>
+                <p className="mt-2 text-muted-foreground">شهادات ورخص تدريب رسمية معتمدة محلياً ودولياً.</p>
               </div>
-              <div className="grid gap-6 md:grid-cols-3">
+
+              <div className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {certificates.map((cert, idx) => (
-                  <div key={idx} className="border border-border bg-card p-3 rounded-xl shadow-sm overflow-hidden group">
-                    <img
-                      src={cert.src}
-                      alt={cert.title}
-                      loading="lazy"
-                      className="w-full h-56 object-contain rounded-lg transition-transform group-hover:scale-105"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = "none";
-                      }}
-                    />
-                    <p className="mt-3 text-xs text-center font-bold text-muted-foreground">{cert.title}</p>
+                  <div
+                    key={idx}
+                    className="group overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl"
+                  >
+                    <div className="overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-900 p-2">
+                      <img
+                        src={cert.src}
+                        alt={cert.title}
+                        loading="lazy"
+                        className="h-56 w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/placeholder.svg";
+                        }}
+                      />
+                    </div>
+                    <div className="mt-4 flex items-center gap-2">
+                      <Award className="h-5 w-5 text-primary shrink-0" />
+                      <div>
+                        <h4 className="text-sm font-bold text-foreground">{cert.title}</h4>
+                        <p className="text-xs text-muted-foreground">{cert.desc}</p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -244,33 +308,47 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Contact & Socials Section from API */}
-        <section id="contact" className="border-t border-border bg-card">
-          <div className="container mx-auto max-w-6xl px-4 py-10 text-center md:py-12">
-            <h2 className="text-2xl font-extrabold md:text-3xl">تابعنا على وسائل التواصل</h2>
-            <p className="mt-2 text-lg font-bold text-primary" dir="ltr">01027379022</p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              {activeSocials.map((social, idx) => {
-                const iconKey = social.platform.toLowerCase();
-                const icon = SOCIAL_ICONS[iconKey] ?? <Globe className="h-4 w-4 text-primary" />;
-                return (
-                  <a
-                    key={idx}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-5 py-3 text-sm font-bold transition-colors hover:border-primary hover:text-primary shadow-sm"
-                  >
-                    {icon}
-                    {social.platform}
-                  </a>
-                );
-              })}
+        {/* Contact & Socials Section */}
+        <section id="contact" className="container mx-auto max-w-6xl px-4 py-14">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-primary/95 to-amber-700 p-10 md:p-14 text-white shadow-2xl shadow-primary/20 text-center">
+            <div className="glow-blob top-0 right-0 h-64 w-64 bg-amber-400/30" />
+            <div className="glow-blob bottom-0 left-0 h-64 w-64 bg-primary/40" />
+
+            <div className="relative z-10 mx-auto max-w-2xl">
+              <span className="inline-block rounded-full bg-white/10 px-4 py-1 text-xs font-bold text-amber-200 backdrop-blur-md">
+                تواصل مباشر وحجز المكان
+              </span>
+              <h2 className="mt-4 text-3xl font-black leading-snug md:text-5xl text-white">
+                تابعنا على وسائل التواصل
+              </h2>
+              <p className="mt-4 text-sm md:text-base text-slate-200" dir="ltr">
+                01027379022
+              </p>
+
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                {activeSocials.map((social, idx) => {
+                  const iconKey = social.platform.toLowerCase();
+                  const icon = SOCIAL_ICONS[iconKey] ?? <Globe className="h-4 w-4" />;
+                  return (
+                    <a
+                      key={idx}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-5 py-3 text-xs font-bold text-white backdrop-blur-md transition-all hover:bg-white hover:text-slate-900"
+                    >
+                      {icon}
+                      <span>{social.platform}</span>
+                    </a>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
       </main>
 
+      {/* Real Full Platform Footer */}
       <Footer />
     </div>
   );
