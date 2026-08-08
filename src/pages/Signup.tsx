@@ -37,12 +37,12 @@ const Signup = () => {
           : "تابع تقدّم أبنائك واشترِ لهم الدورات"
       }
       footer={
-        <>
-          لديك حساب بالفعل؟{" "}
+        <span>
+          <span>لديك حساب بالفعل؟ </span>
           <Link to="/login" className="text-primary font-bold hover:underline">
             سجّل الدخول
           </Link>
-        </>
+        </span>
       }
     >
       {/* Role Tabs */}
@@ -278,11 +278,11 @@ const StudentForm = ({
         {loading ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            جارٍ إنشاء الحساب...
+            <span>جارٍ إنشاء الحساب...</span>
           </>
         ) : (
           <>
-            إنشاء حساب طالب
+            <span>إنشاء حساب طالب</span>
             <ArrowLeft className="w-4 h-4" />
           </>
         )}
@@ -365,10 +365,13 @@ const ParentForm = ({ navigate }: { navigate: ReturnType<typeof useNavigate> }) 
       </div>
       <Button type="submit" size="lg" className="w-full gap-2 font-bold" disabled={loading}>
         {loading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span>جارٍ إنشاء الحساب...</span>
+          </>
         ) : (
           <>
-            إنشاء حساب ولي أمر
+            <span>إنشاء حساب ولي أمر</span>
             <ArrowLeft className="w-4 h-4" />
           </>
         )}

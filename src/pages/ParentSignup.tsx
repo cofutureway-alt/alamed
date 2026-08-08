@@ -63,10 +63,12 @@ const ParentSignup = () => {
       title="تسجيل حساب ولي أمر"
       subtitle="تابع تقدّم أبنائك واشترِ لهم الدورات"
       footer={
-        <>
-          لديك حساب؟{" "}
-          <Link to="/login" className="text-primary font-bold hover:underline">سجّل الدخول</Link>
-        </>
+        <span>
+          <span>لديك حساب؟ </span>
+          <Link to="/login" className="text-primary font-bold hover:underline">
+            سجّل الدخول
+          </Link>
+        </span>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -87,7 +89,17 @@ const ParentSignup = () => {
           <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} />
         </div>
         <Button type="submit" size="lg" className="w-full gap-2 font-bold" disabled={loading}>
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>إنشاء الحساب<ArrowLeft className="w-4 h-4" /></>}
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>جارٍ إنشاء الحساب...</span>
+            </>
+          ) : (
+            <>
+              <span>إنشاء الحساب</span>
+              <ArrowLeft className="w-4 h-4" />
+            </>
+          )}
         </Button>
       </form>
     </AuthLayout>

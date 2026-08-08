@@ -11,7 +11,7 @@ const RequireGuest = ({ children }: Props) => {
   const { user, profile, loading } = useAuth();
   const location = useLocation();
 
-  if (loading || (user && !profile)) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background" dir="rtl">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />

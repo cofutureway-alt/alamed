@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import AuthLayout from "@/components/auth/AuthLayout";
-import { isValidEgPhone, looksLikePhone, normalizeEgPhone, syntheticAuthEmail } from "@/lib/phone";
+import { isValidEgPhone, looksLikePhone, normalizeEgPhone } from "@/lib/phone";
 import { getArabicAuthErrorMessage } from "@/lib/auth-errors";
 
 const Login = () => {
@@ -53,13 +53,39 @@ const Login = () => {
     setLoading(true);
     let authEmail: string = idTrim.toLowerCase();
 
-    // Resolve the internal auth_email associated with phone or email
-    const { data: resolved } = await (supabase as any).rpc(
-      "resolve_login_email",
-      { _identifier: identifierMode === "phone" ? normalizeEgPhone(idTrim) : idTrim },
-    );
-    if (resolved && typeof resolved === "string" && resolved.trim()) {
-      authEmail = resolved.trim();
+    // 1. Phone number resolution
+    if (identifierMode === "phone") {
+      const canonicalPhone = normalizeEgPhone(idTrim);
+      try {
+        const { data: resolved, error: rpcError } = await (supabase as any).rpc(
+          "resolve_login_email",
+          { _identifier: canonicalPhone },
+        );
+        if (!rpcError && resolved && typeof resolved === "string" && resolved.trim()) {
+          authEmail = resolved.trim();
+        } else {
+          setLoading(false);
+          toast.error("رقم الهاتف غير مسجل، يرجى التحقق من الرقم أو إنشاء حساب جديد.");
+          return;
+        }
+      } catch {
+        setLoading(false);
+        toast.error("تعذر العثور على الحساب المرتبط بهذا الرقم.");
+        return;
+      }
+    } else {
+      // 2. Email resolution (handles custom mapped accounts if any, otherwise uses entered email)
+      try {
+        const { data: resolved, error: rpcError } = await (supabase as any).rpc(
+          "resolve_login_email",
+          { _identifier: idTrim },
+        );
+        if (!rpcError && resolved && typeof resolved === "string" && resolved.trim()) {
+          authEmail = resolved.trim();
+        }
+      } catch {
+        // Fallback directly to entered email
+      }
     }
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -108,16 +134,16 @@ const Login = () => {
       title="تسجيل الدخول"
       subtitle="أهلاً بعودتك إلى منصة العميد"
       footer={
-        <>
-          ليس لديك حساب؟{" "}
+        <span>
+          <span>ليس لديك حساب؟ </span>
           <Link to="/signup" className="text-primary font-bold hover:underline">
             أنشئ حساباً جديداً
           </Link>
-          {" · "}
+          <span> · </span>
           <Link to="/parent-signup" className="text-primary font-bold hover:underline">
             تسجيل ولي أمر
           </Link>
-        </>
+        </span>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -130,11 +156,12 @@ const Login = () => {
             <Input
               id="identifier"
               type="text"
+              translate="no"
               dir={identifierMode === "email" ? "ltr" : "auto"}
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               placeholder="01012345678 أو name@example.com"
-              className="pr-10 text-right"
+              className="pr-10 text-right notranslate"
               disabled={loading}
               autoComplete="username"
             />
@@ -154,10 +181,11 @@ const Login = () => {
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
+              translate="no"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="pr-10 pl-10"
+              className="pr-10 pl-10 notranslate"
               disabled={loading}
               autoComplete="current-password"
             />
@@ -176,15 +204,15 @@ const Login = () => {
         <motion.div whileHover={{ scale: loading ? 1 : 1.01 }} whileTap={{ scale: 0.99 }}>
           <Button type="submit" className="w-full gap-2 font-bold" size="lg" disabled={loading}>
             {loading ? (
-              <>
+              <span className="inline-flex items-center justify-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                جارٍ تسجيل الدخول...
-              </>
+                <span>جارٍ تسجيل الدخول...</span>
+              </span>
             ) : (
-              <>
-                تسجيل الدخول
+              <span className="inline-flex items-center justify-center gap-2">
+                <span>تسجيل الدخول</span>
                 <ArrowLeft className="w-4 h-4" />
-              </>
+              </span>
             )}
           </Button>
         </motion.div>
